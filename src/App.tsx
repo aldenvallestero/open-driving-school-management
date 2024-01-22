@@ -1,8 +1,8 @@
-import './App.css';
-import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css'
+import React, { Suspense } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-const LoginPage = React.lazy(() => import('./pages/login-page'));
+const LoginPage = React.lazy(() => import('./pages/login-page'))
 
 function App() {
   return (
@@ -21,4 +21,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
