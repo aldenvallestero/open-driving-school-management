@@ -2,6 +2,7 @@ import './App.css'
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+const IdPage = React.lazy(() => import('./pages/id-page'))
 const LoginPage = React.lazy(() => import('./pages/login-page'))
 
 function App() {
@@ -15,7 +16,15 @@ function App() {
               <LoginPage />
             </Suspense>
           }
-          />
+        />
+        <Route
+          path='/id' 
+          element={
+            <Suspense fallback="Id ...">
+              <IdPage />
+            </Suspense>
+          }
+        />
       </Routes>
     </Router>
   );
