@@ -2,6 +2,7 @@ import './App.css'
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+const Header = React.lazy(() => import('./components/header-component'))
 const IdPage = React.lazy(() => import('./pages/id-page'))
 const LoginPage = React.lazy(() => import('./pages/login-page'))
 const ProfilePage = React.lazy(() => import('./pages/profile-page'))
@@ -9,9 +10,10 @@ const ProfilePage = React.lazy(() => import('./pages/profile-page'))
 function App() {
   return (
     <Router>
+      <Header />
       <Routes>
         <Route
-          path='/' 
+          path='/'
           element={
             <Suspense fallback="Login ...">
               <LoginPage />
@@ -19,7 +21,7 @@ function App() {
           }
           />
         <Route
-          path='/profile' 
+          path='/profile'
           element={
             <Suspense fallback="Profile ...">
               <ProfilePage />
@@ -27,7 +29,7 @@ function App() {
           }
         />
         <Route
-          path='/id' 
+          path='/id'
           element={
             <Suspense fallback="Id ...">
               <IdPage />
