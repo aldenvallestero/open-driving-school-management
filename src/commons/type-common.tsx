@@ -1,7 +1,7 @@
 export type TInput = {
   type: string,
   placeholder?: string,
-  onChangeHandler: any,
+  callback: (data: string) => void,
 }
 
 export type TButton = {
