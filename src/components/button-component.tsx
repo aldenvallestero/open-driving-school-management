@@ -1,7 +1,7 @@
 import { TButton } from '../commons/type-common'
 
-export default function Button({ placeholder }: TButton) {
+export default function Button({ placeholder, callback }: TButton) {
   return (
-    <button className='bg-white text-red-800 rounded-md p-1 w-28'>{placeholder}</button>
+    <button className='bg-white hover:bg-gray-400 rounded-md p-2 w-full' onClick={callback}>{placeholder}</button>
   )
 }
