@@ -1,6 +1,6 @@
 import { TInput } from '../commons/type-common'
 
-export default function Input({ type, placeholder="", callback }: TInput) {
+export default function Input({ type="text", placeholder="", callback }: TInput) {
   return (
     <input
       type={type}
