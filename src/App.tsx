@@ -6,14 +6,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 const Header = React.lazy(() => import('./components/header-component'))
 
 const IdPage = React.lazy(() => import('./pages/id-page'))
-const AdminPage = React.lazy(() => import('./pages/admin-page'))
-const StudentPage = React.lazy(() => import('./pages/student-page'))
-const SchoolRegisterPage = React.lazy(() => import('./pages/school-register-page'))
-const StudentRegisterPage = React.lazy(() => import('./pages/student-register-page'))
-const SchoolLoginPage = React.lazy(() => import('./pages/school-login-page'))
-const StudentLoginPage = React.lazy(() => import('./pages/student-login-page'))
 const CoursePage = React.lazy(() => import('./pages/course-page'))
 const LogoutPage = React.lazy(() => import('./pages/logout-page'))
+const SchoolPage = React.lazy(() => import('./pages/school-page'))
+const StudentPage = React.lazy(() => import('./pages/student-page'))
+const SchoolLoginPage = React.lazy(() => import('./pages/school-login-page'))
+const StudentLoginPage = React.lazy(() => import('./pages/student-login-page'))
+const SchoolRegisterPage = React.lazy(() => import('./pages/school-register-page'))
+const StudentRegisterPage = React.lazy(() => import('./pages/student-register-page'))
 
 function App() {
 
@@ -45,7 +45,7 @@ function App() {
                 <StudentLoginPage />
               </Suspense>
             }
-            />
+          />
           <Route
             path='/school/login'
             element={
@@ -53,7 +53,15 @@ function App() {
                 <SchoolLoginPage />
               </Suspense>
             }
-            />
+          />
+          <Route
+            path='/student'
+            element={
+              <Suspense fallback="Student ...">
+                <StudentPage />
+              </Suspense>
+            }
+          />
           <Route
             path='/student/:studentId'
             element={
@@ -71,7 +79,7 @@ function App() {
             }
           />
           <Route
-            path='school/register'
+            path='/school/register'
             element={
               <Suspense fallback="School Register ...">
                 <SchoolRegisterPage />
@@ -79,7 +87,7 @@ function App() {
             }
           />
           <Route
-            path='student/register'
+            path='/student/register'
             element={
               <Suspense fallback="Student Register ...">
                 <StudentRegisterPage />
@@ -87,10 +95,10 @@ function App() {
             }
           />
           <Route
-            path='/admin'
+            path='/school'
             element={
-              <Suspense fallback="Admin ...">
-                <AdminPage />
+              <Suspense fallback="School ...">
+                <SchoolPage />
               </Suspense>
             }
           />
@@ -107,6 +115,14 @@ function App() {
             element={
               <Suspense fallback="Logout ...">
                 <LogoutPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path='*'
+            element={
+              <Suspense fallback="All ...">
+                <SchoolLoginPage />
               </Suspense>
             }
           />

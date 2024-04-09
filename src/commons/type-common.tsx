@@ -19,14 +19,17 @@ export type TRegister = {
   email: string
   password: string
   firstName: string
-  middleName: string
+  middleName: string | undefined
   lastName: string
-  husbandLastName: string | undefined
+  marriageLastName: string | undefined
+  suffix: string | undefined
+  address: string,
+  birthday: string,
+  gender: string,
+  school: string,
+  branch: string,
   phone: string
-  selectedPackage: {
-    name: string
-    cost: number
-  }
+  course: string
 }
 
 export type TCourse = {

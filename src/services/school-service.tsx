@@ -36,8 +36,8 @@ export default class SchoolService extends AxiosClient {
 
   async getSchoolById(schoolId: string) {
     try {
-      const result = await this.schoolClient.get(`/${schoolId}`)
-      return result
+      const { data } = await this.schoolClient.get(`/${schoolId}`)
+      return data
     } catch (error) {
       console.log(error)
     }

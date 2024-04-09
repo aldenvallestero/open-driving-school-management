@@ -1,9 +1,9 @@
-import Input from '../components/input-component'
-import Button from '../components/button-component'
-import { useContext, useState } from 'react'
-import { UserContext } from '../contexts/Context'
-import StudentService from '../services/student-service'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Input from '../components/input-component'
+import { UserContext } from '../contexts/Context'
+import Button from '../components/button-component'
+import StudentService from '../services/student-service'
 
 export default function StudentLoginPage() {
   const studentService = new StudentService()
@@ -18,13 +18,23 @@ export default function StudentLoginPage() {
     const token: string = await studentService.login(email, password)
 
     if (!token) {
-      alert('School not found!')
+      alert('Student not found!')
       return
     }
 
     setUser(token)
     navigate('/student')
   }
+
+  const handleRegister = async () => {
+    navigate('/student/register')
+  }
+
+  useEffect(() => {
+    if (user) {
+      navigate('/student')
+    }
+  })
 
   return (
     <div className="container-fluid flex bg-slate-200 justify-center align-middle items-center min-h-screen">
@@ -40,6 +50,9 @@ export default function StudentLoginPage() {
         </div>
         <div className="block mb-4">
           <Button placeholder="Login" callback={handleLogin} />
+        </div>
+        <div className="block mb-4">
+          <Button placeholder="Create an account" callback={handleRegister} />
         </div>
       </div>
     </div>

@@ -6,6 +6,15 @@ class AttendanceService extends AxiosClient {
     super()
   }
 
+  async createAttendance(token: string, newAttendance: any): Promise<any> {
+    try {
+      const { data } = await this.attendanceClient.post('/', { ...newAttendance }, { headers: { Authorization: `Bearer ${token}` } })
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async getAllAttendancesBySchoolId(token: string): Promise<any> {
     try {
       const { data } = await this.attendanceClient.get('/', { headers: { Authorization: `Bearer ${token}` } })

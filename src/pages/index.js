@@ -1,6 +1,6 @@
 export * from './id-page'
-export * from './admin-page'
 export * from './course-page'
+export * from './school-page'
 export * from './logout-page'
 export * from './student-page'
 export * from './attendance-page'

@@ -18,4 +18,14 @@ export default class BranchService extends AxiosClient {
       console.log(error)
     }
   }
+
+  async deleteBranch(token: string, branch: string) {
+    try {
+      const { data } = await this.branchClient.delete(`/${branch}`, { headers: { Authorization: `Bearer ${token}` } })
+      console.log(data)
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

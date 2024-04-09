@@ -23,7 +23,7 @@ export default function SchoolLoginPage() {
     }
 
     setUser(token)
-    navigate('/admin')
+    navigate('/school')
   }
   
   const handleRegister = async () => {
@@ -31,21 +31,25 @@ export default function SchoolLoginPage() {
   }
 
   return (
-    <div className="container-fluid flex bg-slate-200 justify-center align-middle items-center min-h-screen">
-      <div className="shadow-2xl rounded-md p-20">
-        <h1 className="font-bold text-3xl mb-4">School Login</h1>
-        <div className="block mb-4">
-          <label htmlFor="" className='block'>Email or Username</label>
-          <Input type="text" placeholder="eg. juandelacruz" callback={setEmail} />
+    <div className="container-fluid grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 auto-rows-max bg-slate-200 min-h-screen">
+      <div className="p-10">
+        <h1 className='text-6xl font-bold text-amber-800 mb-1'>Driving School Powerhouse.</h1>
+        <p className='text-4xl font-bold text-gray-800'>A software that can automate 90% of the job.</p>
+      </div>
+
+      <div className="p-10">
+        <div className="block mb-10">
+          <label htmlFor="" className='block'>Email Address</label>
+          <Input type="text" placeholder="eg. example@email.com" callback={setEmail} />
         </div>
-        <div className="block mb-4">
+        <div className="block mb-10">
           <label htmlFor="" className='block'>Password</label>
           <Input type="password" callback={setPassword} />
         </div>
-        <div className="block mb-4">
+        <div className="block mb-10">
           <Button placeholder="Login" callback={handleLogin} />
         </div>
-        <div className="block mb-4">
+        <div className="block mb-10">
           <Button placeholder="Create an account" callback={handleRegister} />
         </div>
       </div>

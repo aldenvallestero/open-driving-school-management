@@ -1,4 +1,5 @@
 import AxiosClient from '../client/axios-client'
+import { TRegister } from '../commons/type-common'
 
 class StudentService extends AxiosClient {
   async login(email: string, password: string) {
@@ -11,11 +12,10 @@ class StudentService extends AxiosClient {
     }
   }
 
-  async register(student: object) {
+  async register(student: TRegister) {
     try {
-      const data = student
-      const token: string = await this.studentClient.post('/register', { ...data })
-      return token
+      const { data } = await this.studentClient.post('/register', { ...student })
+      return data
     } catch (error) {
       console.log(error)
     }
