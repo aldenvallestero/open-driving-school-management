@@ -1,4 +1,4 @@
-import axios, { Axios } from 'axios';
+import axios, { Axios } from "axios";
 
 abstract class AxiosClient {
   baseURL: string;
@@ -10,29 +10,29 @@ abstract class AxiosClient {
   attendanceClient: Axios;
 
   constructor() {
-    this.baseURL = 'http://localhost:3000';
+    this.baseURL = "http://localhost:3000";
     this.schoolClient = axios.create({
-      baseURL: this.baseURL + '/school',
+      baseURL: this.baseURL + "/school",
     });
 
     this.branchClient = axios.create({
-      baseURL: this.baseURL + '/branch',
+      baseURL: this.baseURL + "/branch",
     });
 
     this.courseClient = axios.create({
-      baseURL: this.baseURL + '/course',
+      baseURL: this.baseURL + "/course",
     });
 
     this.studentClient = axios.create({
-      baseURL: this.baseURL + '/student',
+      baseURL: this.baseURL + "/student",
     });
 
     this.enrolleeClient = axios.create({
-      baseURL: this.baseURL + '/enrollee',
+      baseURL: this.baseURL + "/enrollee",
     });
 
     this.attendanceClient = axios.create({
-      baseURL: this.baseURL + '/attendance',
+      baseURL: this.baseURL + "/attendance",
     });
   }
 }

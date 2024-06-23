@@ -1,79 +1,91 @@
-import AxiosClient from '../client/axios-client'
-import { TRegister } from '../commons/type-common'
+import AxiosClient from "../client/axios-client";
+import { TRegister } from "../commons/type-common";
 
 class StudentService extends AxiosClient {
   async login(email: string, password: string) {
     try {
-      const { data } = await this.studentClient.post('/login', { ...{ email, password } })
-      return data
+      const { data } = await this.studentClient.post("/login", {
+        ...{ email, password },
+      });
+      return data;
     } catch (error) {
-      console.log(error)
-      return undefined
+      console.log(error);
+      return undefined;
     }
   }
 
   async register(student: TRegister) {
     try {
-      const { data } = await this.studentClient.post('/register', { ...student })
-      return data
+      const { data } = await this.studentClient.post("/register", {
+        ...student,
+      });
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
-  async getStudentById(studentId: string, token:string) {
+  async getStudentById(studentId: string, token: string) {
     try {
-      const { data } = await this.studentClient.get(`/${studentId}`, { headers: { Authorization: `Bearer ${token}` } })
-      return data
+      const { data } = await this.studentClient.get(`/${studentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async getStudent(token: string) {
     try {
-      const { data } = await this.studentClient.get('/profile', { headers: { Authorization: `Bearer ${token}` } })
-      return data
+      const { data } = await this.studentClient.get("/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async getAllStudentsBySchoolId(token: string) {
     try {
-      const { data } = await this.studentClient.get('/', { headers: { Authorization: `Bearer ${token}` } })
-      return data
+      const { data } = await this.studentClient.get("/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async createStudent(token: string, student: object) {
     try {
-      const { data } = await this.studentClient.post('/register', student, { headers: { Authorization: `Bearer ${token}` } })
-      return data
+      const { data } = await this.studentClient.post("/register", student, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
     } catch (error) {
-      console.log(error)
-      return undefined
+      console.log(error);
+      return undefined;
     }
   }
 
   async searchStudent(token: string, filter: string) {
     try {
-      const { data } = await this.studentClient.get('/search', {
+      const { data } = await this.studentClient.get("/search", {
         params: {
           filter,
         },
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-      })
-      return data
+      });
+      return data;
     } catch (error) {
-      console.log(error)
-      return undefined
+      console.log(error);
+      return undefined;
     }
   }
 }
 
-export default StudentService
+export default StudentService;
