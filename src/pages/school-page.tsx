@@ -3,6 +3,7 @@ import { Datepicker } from "flowbite-react";
 import { MdDashboard } from "react-icons/md";
 import { Modal, Select } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
+import Alert from "../components/alert-component";
 import Input from "../components/input-component";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
@@ -13,12 +14,13 @@ import { useContext, useEffect, useState } from "react";
 import StudentService from "../services/student-service";
 import AttendanceService from "../services/attendance-service";
 import InlineButton from "../components/inline-button-component";
+
 import {
   HiTrash,
   HiPencil,
-  HiClipboardList,
   HiUserCircle,
   HiStatusOffline,
+  HiClipboardList,
 } from "react-icons/hi";
 
 export default function SchoolPage() {
@@ -27,8 +29,11 @@ export default function SchoolPage() {
   const courseService = new CourseService();
   const studentService = new StudentService();
   const attendanceService = new AttendanceService();
+
   const navigate = useNavigate();
-  const [openBranchModal, setOpenBranchModal] = useState<boolean>(false);
+
+  const [openCreateBranchModal, setOpenCreateBranchModal] =
+    useState<boolean>(false);
   const [openCourseModal, setOpenCourseModal] = useState<boolean>(false);
   const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
   const [openAttendanceModal, setOpenAttendanceModal] =
@@ -505,72 +510,89 @@ export default function SchoolPage() {
             <div className="w-32 mb-4">
               <Button
                 placeholder="Create Branch"
-                callback={() => setOpenBranchModal(true)}
+                callback={() => setOpenCreateBranchModal(true)}
               />
             </div>
-            <div className="relative overflow-x-auto">
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      #
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Address
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Total # of Students
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {branches?.map((branches: any, index: number) => (
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        <a href={`/branch/${branches._id}`}>{index + 1}</a>
-                      </th>
-                      <td className="px-6 py-4">
-                        <a href={`/branch/${branches._id}`}>
-                          {branches.address}
-                        </a>
-                      </td>
-                      <td className="px-6 py-4">{branches.students.length}</td>
-                      <td className="px-6 py-4">
-                        <button className="flex align-middle justify-center items-center">
-                          <HiPencil />
-                          Edit Branch
-                        </button>
-                        {/* <button className="flex align-middle justify-center items-center"><HiStatusOffline />Disable / Enable Branch</button> */}
 
-                        {branches.students.length > 0 ? (
-                          <></>
-                        ) : (
-                          <button
-                            onClick={() => deleteBranch(branches._id)}
-                            className="flex align-middle justify-center items-center text-red-800"
-                          >
-                            <HiTrash />
-                            Delete Branch
-                          </button>
-                        )}
-                      </td>
+            {!branches && (
+              <Alert
+                message={
+                  "Create a school branch record first before adding courses, students, and attendances."
+                }
+                type={"warning"}
+              />
+            )}
+
+            {branches && (
+              <div className="relative overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="px-6 py-3">
+                        #
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Address
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Total # of Students
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {branches?.map((branches: any, index: number) => (
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          <a href={`/branch/${branches._id}`}>{index + 1}</a>
+                        </th>
+                        <td className="px-6 py-4">
+                          <a href={`/branch/${branches._id}`}>
+                            {branches.address}
+                          </a>
+                        </td>
+                        <td className="px-6 py-4">
+                          {branches.students.length}
+                        </td>
+                        <td className="px-6 py-4">
+                          <button className="flex align-middle justify-center items-center">
+                            <HiPencil />
+                            Edit Branch
+                          </button>
+                          {/* <button className="flex align-middle justify-center items-center"><HiStatusOffline />Disable / Enable Branch</button> */}
+
+                          {branches.students.length > 0 ? (
+                            <></>
+                          ) : (
+                            <button
+                              onClick={() => deleteBranch(branches._id)}
+                              className="flex align-middle justify-center items-center text-red-800"
+                            >
+                              <HiTrash />
+                              Delete Branch
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </Tabs.Item>
       </Tabs>
 
       {/* MODALS */}
-      <Modal show={openBranchModal} onClose={() => setOpenBranchModal(false)}>
+      <Modal
+        show={openCreateBranchModal}
+        onClose={() => setOpenCreateBranchModal(false)}
+      >
         <Modal.Header>New Branch</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
@@ -585,12 +607,12 @@ export default function SchoolPage() {
             placeholder="Create Branch"
             callback={() => {
               createBranch();
-              setOpenBranchModal(false);
+              setOpenCreateBranchModal(false);
             }}
           />
           <Button
             placeholder="Decline"
-            callback={() => setOpenBranchModal(false)}
+            callback={() => setOpenCreateBranchModal(false)}
           />
         </Modal.Footer>
       </Modal>
@@ -867,6 +889,126 @@ export default function SchoolPage() {
           <Button
             placeholder="Decline"
             callback={() => setOpenCreateAttendanceModal(false)}
+          />
+        </Modal.Footer>
+      </Modal>
+
+      {/* Edit Branch */}
+      <Modal show={openStudentModal} onClose={() => setOpenStudentModal(false)}>
+        <Modal.Header>New Student</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">
+            <div className="mb-2">
+              <label htmlFor="">Student First name</label>
+              <Input callback={setNewStudentFirstName} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Middle Name</label>
+              <Input callback={setNewStudentMiddleName} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Last Name</label>
+              <Input callback={setNewStudentLastName} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Marriage Last Name</label>
+              <Input callback={setNewStudentMarriageLastName} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Email</label>
+              <Input callback={setNewStudentEmail} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Phone</label>
+              <Input callback={setNewStudentPhone} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Address</label>
+              <Input callback={setNewStudentAddress} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Birthday</label>
+              <Input callback={setNewStudentBirthday} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Gender</label>
+              <Select
+                onChange={(e) => {
+                  setNewStudentGender(e.target.value);
+                }}
+                required
+              >
+                <option>Pick your gender</option>
+                <option>Male</option>
+                <option>Female</option>
+              </Select>
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student LTO Client ID</label>
+              <Input callback={setNewStudentLtoClientId} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Password</label>
+              <Input type="password" callback={setNewStudentPassword} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Student Re-Password</label>
+              <Input type="password" callback={setNewStudentPassword} />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Courses</label>
+              <Select
+                onChange={(e) => {
+                  setNewStudentCourse(e.target.value);
+                }}
+                required
+              >
+                <option>Select a course</option>
+                {courses?.map((i: any) => (
+                  <option value={i._id}>{i.name}</option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="">Select Branch</label>
+              <Select
+                onChange={(e) => {
+                  setNewStudentBranch(e.target.value);
+                }}
+                required
+              >
+                <option>Select a branch</option>
+                {branches?.map((i: any) => (
+                  <option value={i._id}>{i.address}</option>
+                ))}
+              </Select>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            placeholder="Enroll Student"
+            callback={() => {
+              createStudent();
+              setOpenStudentModal(false);
+            }}
+          />
+          <Button
+            placeholder="Decline"
+            callback={() => setOpenStudentModal(false)}
           />
         </Modal.Footer>
       </Modal>

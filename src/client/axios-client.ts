@@ -10,7 +10,7 @@ abstract class AxiosClient {
   attendanceClient: Axios;
 
   constructor() {
-    this.baseURL = "http://localhost:3000";
+    this.baseURL = "http://localhost:8080";
     this.schoolClient = axios.create({
       baseURL: this.baseURL + "/school",
     });
