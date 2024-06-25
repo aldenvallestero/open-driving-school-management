@@ -248,7 +248,7 @@ export default function SchoolPage() {
 
   return (
     <div className="container-fluid bg-slate-200 h-screen p-6">
-      <Tabs aria-label="Default tabs" style="default">
+      <Tabs aria-label="Default tabs" style={"default"}>
         <Tabs.Item
           disabled={!branches || !courses || !students}
           title="Attendance"
