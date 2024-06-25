@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/Context";
 
 export default function Header() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [user] = useContext(UserContext);
   const Guest = () => {
     return (
@@ -35,40 +35,40 @@ export default function Header() {
     // }
   };
 
-  const Student = () => {
-    return (
-      <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-        <li>
-          <a
-            href="/course"
-            className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            Course
-          </a>
-        </li>
-        <li>
-          <a
-            href="/student"
-            className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            Student
-          </a>
-        </li>
-        {/* <li>
-          <a href="/id" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">ID</a>
-        </li> */}
-        <li>
-          <a
-            href="/logout"
-            className="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0 dark:text-white md:dark:text-red-500"
-            aria-current="page"
-          >
-            Logout
-          </a>
-        </li>
-      </ul>
-    );
-  };
+  // const Student = () => {
+  //   return (
+  //     <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+  //       <li>
+  //         <a
+  //           href="/course"
+  //           className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+  //         >
+  //           Course
+  //         </a>
+  //       </li>
+  //       <li>
+  //         <a
+  //           href="/student"
+  //           className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+  //         >
+  //           Student
+  //         </a>
+  //       </li>
+  //       {/* <li>
+  //         <a href="/id" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">ID</a>
+  //       </li> */}
+  //       <li>
+  //         <a
+  //           href="/logout"
+  //           className="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0 dark:text-white md:dark:text-red-500"
+  //           aria-current="page"
+  //         >
+  //           Logout
+  //         </a>
+  //       </li>
+  //     </ul>
+  //   );
+  // };
 
   const Admin = () => {
     return (
@@ -90,11 +90,7 @@ export default function Header() {
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8"
-            alt="A1C Logo"
-          />
+          <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="A1C Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             A1C Driving School
           </span>

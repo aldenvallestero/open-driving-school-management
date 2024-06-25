@@ -76,14 +76,13 @@ export default function StudentRegisterPage() {
   };
 
   useEffect(() => {
-    schoolService
-      .getSchoolById("65f690bff6ffc0dbad940701")
-      .then(({ courses, branches }) => {
-        if (courses && branches) {
-          setCourses(courses);
-          setBranches(branches);
-        }
-      });
+    schoolService.getSchoolById("65f690bff6ffc0dbad940701").then(({ courses, branches }) => {
+      if (courses && branches) {
+        setCourses(courses);
+        setBranches(branches);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -92,8 +91,8 @@ export default function StudentRegisterPage() {
         Enroll by creating a student account
       </h1>
       <p>
-        Fill out personal information and choose your branch & course in order
-        to proceed with the enrollment.
+        Fill out personal information and choose your branch & course in order to proceed with the
+        enrollment.
       </p>
       <div className="inline-block p-4">
         <label htmlFor="" className="block">
@@ -117,11 +116,7 @@ export default function StudentRegisterPage() {
         <label htmlFor="" className="block">
           Husband Last Name
         </label>
-        <Input
-          type="text"
-          placeholder="eg. Mendoza"
-          callback={setMarriageLastName}
-        />
+        <Input type="text" placeholder="eg. Mendoza" callback={setMarriageLastName} />
       </div>
       <div className="inline-block p-4">
         <label htmlFor="" className="block">
@@ -139,11 +134,7 @@ export default function StudentRegisterPage() {
         <label htmlFor="" className="block">
           Address
         </label>
-        <Input
-          type="text"
-          placeholder="Present Address"
-          callback={setAddress}
-        />
+        <Input type="text" placeholder="Present Address" callback={setAddress} />
       </div>
       <div className="inline-block p-4">
         <label htmlFor="" className="block">
@@ -155,31 +146,19 @@ export default function StudentRegisterPage() {
         <label htmlFor="" className="block">
           Email
         </label>
-        <Input
-          type="email"
-          placeholder="eg. example@email.com"
-          callback={setEmail}
-        />
+        <Input type="email" placeholder="eg. example@email.com" callback={setEmail} />
       </div>
       <div className="inline-block p-4">
         <label htmlFor="" className="block">
           Password
         </label>
-        <Input
-          type="password"
-          placeholder="Create your password"
-          callback={setPassword}
-        />
+        <Input type="password" placeholder="Create your password" callback={setPassword} />
       </div>
       <div className="inline-block p-4">
         <label htmlFor="" className="block">
           Repeat Password
         </label>
-        <Input
-          type="password"
-          placeholder="Re-type your password"
-          callback={setRePassword}
-        />
+        <Input type="password" placeholder="Re-type your password" callback={setRePassword} />
       </div>
       <div className="inline-block p-4">
         <label htmlFor="" className="block">
@@ -209,9 +188,7 @@ export default function StudentRegisterPage() {
           required
         >
           <option>Select a branch</option>
-          {branches?.map((i: any) => (
-            <option value={i._id}>{i.address}</option>
-          ))}
+          {branches?.map((i: any) => <option value={i._id}>{i.address}</option>)}
         </Select>
       </div>
       <div className="inline-block p-4">
@@ -232,8 +209,7 @@ export default function StudentRegisterPage() {
       <div className="block mb-4">
         <Button placeholder="Register" callback={handleRegister} />
         <small className="block mt-1 text-gray-600">
-          By clicking the register button, you agree to our data privacy and
-          terms & conditions.
+          By clicking the register button, you agree to our data privacy and terms & conditions.
         </small>
         <br />
 

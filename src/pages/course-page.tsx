@@ -27,6 +27,7 @@ export default function CoursePage() {
         setCourses(result);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEnrollment = (course: any) => {
