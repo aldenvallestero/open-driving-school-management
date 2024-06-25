@@ -1,13 +1,11 @@
 import AxiosClient from "../client/axios-client";
 
 export default class BranchService extends AxiosClient {
-  async createBranch(token: string, address: string) {
+  async createBranch(token: string, branch: any) {
     try {
-      const { data } = await this.branchClient.post(
-        "/",
-        { address },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
+      const { data } = await this.branchClient.post("/", branch, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return data;
     } catch (error) {
       console.log(error);
@@ -25,12 +23,24 @@ export default class BranchService extends AxiosClient {
     }
   }
 
+  async updateBranch(token: string, branchId: string, address: string) {
+    try {
+      const { data } = await this.branchClient.put(
+        `/${branchId}`,
+        { address },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async deleteBranch(token: string, branch: string) {
     try {
       const { data } = await this.branchClient.delete(`/${branch}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(data);
       return data;
     } catch (error) {
       console.log(error);

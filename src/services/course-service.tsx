@@ -1,12 +1,12 @@
 import AxiosClient from "../client/axios-client";
 
 export default class CourseService extends AxiosClient {
-  async createCourse({ name, description, price, user }: any) {
+  async createCourse({ name, description, price, schoolToken }: any) {
     try {
       const { data } = await this.courseClient.post(
         "/",
         { ...{ name, description, price } },
-        { headers: { Authorization: "Bearer " + user } },
+        { headers: { Authorization: "Bearer " + schoolToken } },
       );
       return data;
     } catch (error) {
@@ -23,10 +23,10 @@ export default class CourseService extends AxiosClient {
     }
   }
 
-  async getAllCoursesBySchoolId(token: string) {
+  async getAllCoursesBySchoolId(schoolToken: string) {
     try {
       const { data } = await this.courseClient.get("/", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${schoolToken}` },
       });
       return data;
     } catch (error) {

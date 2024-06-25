@@ -15,13 +15,7 @@ import StudentService from "../services/student-service";
 import AttendanceService from "../services/attendance-service";
 import InlineButton from "../components/inline-button-component";
 
-import {
-  HiTrash,
-  HiPencil,
-  HiUserCircle,
-  HiStatusOffline,
-  HiClipboardList,
-} from "react-icons/hi";
+import { HiTrash, HiPencil, HiUserCircle, HiStatusOffline, HiClipboardList } from "react-icons/hi";
 
 export default function SchoolPage() {
   const schoolService = new SchoolService();
@@ -32,18 +26,12 @@ export default function SchoolPage() {
 
   const navigate = useNavigate();
 
-  const [openCreateBranchModal, setOpenCreateBranchModal] =
-    useState<boolean>(false);
+  const [openCreateBranchModal, setOpenCreateBranchModal] = useState<boolean>(false);
+  const [openUpdateBranchModal, setOpenUpdateBranchModal] = useState<boolean>(false);
   const [openCourseModal, setOpenCourseModal] = useState<boolean>(false);
   const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
-  const [openAttendanceModal, setOpenAttendanceModal] =
-    useState<boolean>(false);
-  const [openCreateAttendanceModal, setOpenCreateAttendanceModal] =
-    useState<boolean>(false);
-  const [, setName] = useState<string>("Driving School Company, Inc.");
-  const [, setAddress] = useState<string>("City, Province");
-  const [, setPhone] = useState<string>("+63 xxx xxx xxxx");
-  const [, setEmail] = useState<string>("email@example.com");
+  const [openAttendanceModal, setOpenAttendanceModal] = useState<boolean>(false);
+  const [openCreateAttendanceModal, setOpenCreateAttendanceModal] = useState<boolean>(false);
 
   const [newStudentPhone, setNewStudentPhone] = useState<string>("");
   const [newStudentEmail, setNewStudentEmail] = useState<string>("");
@@ -51,54 +39,52 @@ export default function SchoolPage() {
   const [newStudentBranch, setNewStudentBranch] = useState<string>("");
   const [newStudentGender, setNewStudentGender] = useState<string>("");
   const [newStudentAddress, setNewStudentAddress] = useState<string>("");
-  const [newStudentPassword, setNewStudentPassword] = useState<string>("");
   const [newStudentBirthday, setNewStudentBirthday] = useState<string>("");
   const [newStudentLastName, setNewStudentLastName] = useState<string>("");
   const [newStudentFirstName, setNewStudentFirstName] = useState<string>("");
   const [newStudentMiddleName, setNewStudentMiddleName] = useState<string>("");
-  const [newStudentLtoClientId, setNewStudentLtoClientId] =
-    useState<string>("");
-  const [newStudentMarriageLastName, setNewStudentMarriageLastName] =
-    useState<string>("");
+  const [newStudentLtoClientId, setNewStudentLtoClientId] = useState<string>("");
+  const [newStudentMarriageLastName, setNewStudentMarriageLastName] = useState<string>("");
 
   const [school, setSchool] = useState<any>();
   const [courses, setCourses] = useState<any>();
   const [branches, setBranches] = useState<any>();
-  const [students, setStudents] = useState<any>();
+  const [students, setStudents] = useState<any>([]);
   const [attendances, setAttendances] = useState<any>();
+  const [updatedBranchId, setUpdatedBranchId] = useState<string>("");
 
-  const [user] = useContext(UserContext);
+  const [schoolToken] = useContext(UserContext);
 
   useEffect(() => {
-    if (!user) {
+    if (!schoolToken) {
       navigate("/school/login");
     }
 
-    schoolService.getSchool(user).then((result) => {
+    schoolService.getSchool(schoolToken).then((result) => {
       if (result) {
         setSchool(result);
       }
     });
 
-    branchService.getAllBranchesBySchoolId(user).then((result) => {
+    branchService.getAllBranchesBySchoolId(schoolToken).then((result) => {
       if (result?.length > 0) {
         setBranches(result);
       }
     });
 
-    courseService.getAllCoursesBySchoolId(user).then((result) => {
+    courseService.getAllCoursesBySchoolId(schoolToken).then((result) => {
       if (result?.length > 0) {
         setCourses(result);
       }
     });
 
-    studentService.getAllStudentsBySchoolId(user).then((result) => {
+    studentService.getAllStudentsBySchoolId(schoolToken).then((result) => {
       if (result?.length > 0) {
         setStudents(result);
       }
     });
 
-    attendanceService.getAllAttendancesBySchoolId(user).then((result) => {
+    attendanceService.getAllAttendancesBySchoolId(schoolToken).then((result) => {
       if (result) {
         console.log(result);
         setAttendances(result);
@@ -110,14 +96,17 @@ export default function SchoolPage() {
   const [newCourseName, setNewCourseName] = useState<string>();
   const [newCoursePrice, setNewCoursePrice] = useState<string>();
   const [newBranchAddress, setNewBranchAddress] = useState<string>();
+  const [newBranchContactPerson, setNewBranchContactPerson] = useState<string>();
+  const [newBranchContactNumber, setNewBranchContactNumber] = useState<string>();
   const [newAttendanceDate, setNewAttendanceDate] = useState<Date>();
   const [newAttendanceTimeIn, setNewAttendanceTimeIn] = useState<string>();
   const [newCourseDescription, setNewCourseDescription] = useState<string>();
   const [newAttendanceTimeOut, setNewAttendanceTimeOut] = useState<string>();
   const [newAttendanceCourseId, setNewAttendanceCourseId] = useState<string>();
   const [newAttendanceBranchId, setNewAttendanceBranchId] = useState<string>();
-  const [newAttendanceStudentId, setNewAttendanceStudentId] =
-    useState<string>();
+  const [newAttendanceStudentId, setNewAttendanceStudentId] = useState<string>();
+
+  const [updatedBranchAddress, setUpdatedBranchAddress] = useState<string>();
 
   const createCourse = async () => {
     if (newCourseName && newCourseDescription && newCoursePrice) {
@@ -126,7 +115,10 @@ export default function SchoolPage() {
         description: newCourseDescription,
         price: parseInt(newCoursePrice),
       };
-      newCourse = await courseService.createCourse({ ...newCourse, user });
+      newCourse = await courseService.createCourse({
+        ...newCourse,
+        schoolToken,
+      });
       if (newCourse) {
         if (courses) setCourses([...courses, newCourse]);
         else setCourses([newCourse]);
@@ -136,10 +128,11 @@ export default function SchoolPage() {
 
   const createBranch = async () => {
     if (newBranchAddress) {
-      const newBranch = await branchService.createBranch(
-        user,
+      const newBranch = await branchService.createBranch(schoolToken, {
         newBranchAddress,
-      );
+        newBranchContactPerson,
+        newBranchContactNumber,
+      });
       if (newBranch) {
         if (branches) setBranches([...branches, newBranch]);
         else setBranches([newBranch]);
@@ -147,32 +140,44 @@ export default function SchoolPage() {
     }
   };
 
+  const updateBranch = async () => {
+    if (updatedBranchAddress) {
+      const updatedBranch = await branchService.updateBranch(
+        schoolToken,
+        updatedBranchId,
+        updatedBranchAddress,
+      );
+      if (updatedBranch) {
+        let allBranches = branches;
+        let updatedBranchIndex = branches.findIndex((x: any) => x._id === updatedBranch._id);
+        allBranches[updatedBranchIndex] = updatedBranch;
+        setBranches([...allBranches]);
+      }
+    }
+  };
+
   const createStudent = async () => {
     if (
-      newStudentFirstName &&
-      newStudentLastName &&
-      newStudentPhone &&
-      newStudentEmail &&
-      newStudentPassword
+      (newStudentFirstName && newStudentLastName && newStudentPhone) ||
+      (newStudentFirstName && newStudentLastName && newStudentEmail)
     ) {
-      const newStudent = {
+      let newStudent = {
         school: school._id,
         email: newStudentEmail,
         phone: newStudentPhone,
         course: newStudentCourse,
         branch: newStudentBranch,
-        gender: newStudentGender,
         address: newStudentAddress,
         lastName: newStudentLastName,
-        birthday: newStudentBirthday,
-        password: newStudentPassword,
         firstName: newStudentFirstName,
-        middleName: newStudentMiddleName,
-        ltoClientId: newStudentLtoClientId,
         marriageLastName: newStudentMarriageLastName,
+        isCreatedBySchool: true,
       };
-      studentService.createStudent(user, newStudent);
-      navigate("/school");
+
+      newStudent = await studentService.createStudent(schoolToken, newStudent);
+
+      console.log("newStudent", newStudent);
+      setStudents([...students, newStudent]);
     }
   };
 
@@ -195,7 +200,7 @@ export default function SchoolPage() {
         student: newAttendanceStudentId,
       };
 
-      attendanceService.createAttendance(user, newAttendance);
+      attendanceService.createAttendance(schoolToken, newAttendance);
       alert("Attendance recorded!");
 
       setNewAttendanceDate(undefined);
@@ -209,31 +214,23 @@ export default function SchoolPage() {
   };
 
   const handleStudentSearch = async () => {
-    const result = await studentService.searchStudent(user, search);
+    const result = await studentService.searchStudent(schoolToken, search);
     setStudents(result);
   };
 
   const handleClearStudentSearch = async () => {
-    studentService.getAllStudentsBySchoolId(user).then((result) => {
+    studentService.getAllStudentsBySchoolId(schoolToken).then((result) => {
       if (result) {
         setStudents(result);
       }
     });
   };
 
-  const handleAttendanceDateFilter = (e: Date) => {
-    console.log(e.getFullYear());
-
-    console.log(e.getMonth());
-
-    console.log(e.getDay());
-  };
-
   const printAttendance = () => {};
 
   const deleteBranch = (branchId: any) => {
     if (window.confirm("U sure?")) {
-      branchService.deleteBranch(user, branchId);
+      branchService.deleteBranch(schoolToken, branchId);
       const newBranches = branches.filter((x: any) => x._id !== branchId);
       setBranches(newBranches);
     }
@@ -258,18 +255,9 @@ export default function SchoolPage() {
                 <br />
                 <br />
 
-                <Input
-                  placeholder="Search name, email, phone"
-                  callback={setSearch}
-                />
-                <InlineButton
-                  placeholder="Search Student"
-                  callback={handleStudentSearch}
-                />
-                <InlineButton
-                  placeholder="Clear Search"
-                  callback={handleClearStudentSearch}
-                />
+                <Input placeholder="Search name, email, phone" callback={setSearch} />
+                <InlineButton placeholder="Search Student" callback={handleStudentSearch} />
+                <InlineButton placeholder="Clear Search" callback={handleClearStudentSearch} />
               </div>
 
               <div className="relative overflow-x-auto mb-4">
@@ -303,37 +291,31 @@ export default function SchoolPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {attendances?.map(
-                      ({ student, course, branch, ...attendance }: any) => (
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                          <th
-                            scope="row"
-                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                          >
-                            <a href={`/attendance`}>
-                              {student.firstName} {student.lastName}
-                            </a>
-                          </th>
-                          <td className="px-6 py-4">{course.name}</td>
-                          <td className="px-6 py-4">
-                            {branch.address.split(", ")[0]}
-                          </td>
-                          <td className="px-6 py-4">
-                            {new Date(attendance.in).toLocaleTimeString()}
-                          </td>
-                          <td className="px-6 py-4">
-                            {new Date(attendance.out).toLocaleTimeString()}
-                          </td>
-                          <td className="px-6 py-4">
-                            {new Date(attendance.createdAt).toDateString()}
-                          </td>
-                          {/* <td className="px-6 py-4">
-                            Instructor
-                            </td> */}
-                          <td className="px-6 py-4">{attendance.status}</td>
-                        </tr>
-                      ),
-                    )}
+                    {attendances?.map(({ student, course, branch, ...attendance }: any) => (
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          <a href={`/attendance`}>
+                            {student.firstName} {student.lastName}
+                          </a>
+                        </th>
+                        <td className="px-6 py-4">{course.name}</td>
+                        <td className="px-6 py-4">{branch.address.split(", ")[0]}</td>
+                        <td className="px-6 py-4">
+                          {new Date(attendance.in).toLocaleTimeString()}
+                        </td>
+                        <td className="px-6 py-4">
+                          {new Date(attendance.out).toLocaleTimeString()}
+                        </td>
+                        <td className="px-6 py-4">
+                          {new Date(attendance.createdAt).toDateString()}
+                        </td>
+                        <td className="px-6 py-4">Instructor</td>
+                        <td className="px-6 py-4">{attendance.status}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -357,18 +339,9 @@ export default function SchoolPage() {
                 <br />
                 <br />
 
-                <Input
-                  placeholder="Search name, email, phone"
-                  callback={setSearch}
-                />
-                <InlineButton
-                  placeholder="Search Student"
-                  callback={handleStudentSearch}
-                />
-                <InlineButton
-                  placeholder="Clear Search"
-                  callback={handleClearStudentSearch}
-                />
+                <Input placeholder="Search name, email, phone" callback={setSearch} />
+                <InlineButton placeholder="Search Student" callback={handleStudentSearch} />
+                <InlineButton placeholder="Clear Search" callback={handleClearStudentSearch} />
               </div>
               <div className="relative overflow-x-auto mb-4">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -407,21 +380,17 @@ export default function SchoolPage() {
                           {index + 1}
                         </th>
                         <td className="px-6 py-4">
-                          <a href={`/student/${student._id}`}>
-                            {student.studentId}
-                          </a>
+                          <a href={`/student/${student?._id}`}>{student.studentId}</a>
                         </td>
                         <td className="px-6 py-4">
-                          <a href={`/student/${student._id}`}>
-                            {`${student.lastName}, ${student.firstName}, ${student.middleName}${student.marriageLastName ? `, ${student.marriageLastName}` : ""}`}
-                          </a>
+                          <a
+                            href={`/student/${student?._id}`}
+                          >{`${student?.lastName}, ${student?.firstName} ${student?.middleName ? `,${student?.middleName}` : ""}${student?.marriageLastName ? `${student?.marriageLastName}` : ""}`}</a>
                         </td>
-                        <td className="px-6 py-4">
-                          {student.branch.address.split(", ")[0]}
-                        </td>
-                        <td className="px-6 py-4">{student.email}</td>
-                        <td className="px-6 py-4">{student.phone}</td>
-                        <td className="px-6 py-4">{student.status}</td>
+                        <td className="px-6 py-4">{student?.branch?.address?.split(", ")[0]}</td>
+                        <td className="px-6 py-4">{student?.email}</td>
+                        <td className="px-6 py-4">{student?.phone}</td>
+                        <td className="px-6 py-4">{student?.status}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -439,10 +408,7 @@ export default function SchoolPage() {
           {branches && (
             <div className="mb-4">
               <div className="w-32 mb-4">
-                <Button
-                  placeholder="Create Course"
-                  callback={() => setOpenCourseModal(true)}
-                />
+                <Button placeholder="Create Course" callback={() => setOpenCourseModal(true)} />
               </div>
               <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -508,19 +474,11 @@ export default function SchoolPage() {
         <Tabs.Item active={!branches} title="Branch" icon={HiClipboardList}>
           <div className="mb-4">
             <div className="w-32 mb-4">
-              <Button
-                placeholder="Create Branch"
-                callback={() => setOpenCreateBranchModal(true)}
-              />
+              <Button placeholder="Create Branch" callback={() => setOpenCreateBranchModal(true)} />
             </div>
 
             {!branches && (
-              <Alert
-                message={
-                  "Create a school branch record first before adding courses, students, and attendances."
-                }
-                type={"warning"}
-              />
+              <Alert message={"Create a school branch to get started."} type={"warning"} />
             )}
 
             {branches && (
@@ -552,15 +510,17 @@ export default function SchoolPage() {
                           <a href={`/branch/${branches._id}`}>{index + 1}</a>
                         </th>
                         <td className="px-6 py-4">
-                          <a href={`/branch/${branches._id}`}>
-                            {branches.address}
-                          </a>
+                          <a href={`/branch/${branches._id}`}>{branches.address}</a>
                         </td>
+                        <td className="px-6 py-4">{branches.students.length}</td>
                         <td className="px-6 py-4">
-                          {branches.students.length}
-                        </td>
-                        <td className="px-6 py-4">
-                          <button className="flex align-middle justify-center items-center">
+                          <button
+                            className="flex align-middle justify-center items-center"
+                            onClick={() => {
+                              setOpenUpdateBranchModal(true);
+                              setUpdatedBranchId(branches._id); // * get the specific branch id
+                            }}
+                          >
                             <HiPencil />
                             Edit Branch
                           </button>
@@ -588,17 +548,22 @@ export default function SchoolPage() {
         </Tabs.Item>
       </Tabs>
 
-      {/* MODALS */}
-      <Modal
-        show={openCreateBranchModal}
-        onClose={() => setOpenCreateBranchModal(false)}
-      >
+      {/* Create Branch Modal */}
+      <Modal show={openCreateBranchModal} onClose={() => setOpenCreateBranchModal(false)}>
         <Modal.Header>New Branch</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
             <div className="mb-2">
               <label htmlFor="">Branch Address</label>
               <Input callback={setNewBranchAddress} />
+            </div>
+            <div className="mb-2">
+              <label htmlFor="">Branch Contact Person</label>
+              <Input callback={setNewBranchContactPerson} placeholder="Optional" />
+            </div>
+            <div className="mb-2">
+              <label htmlFor="">Branch Contact Number</label>
+              <Input callback={setNewBranchContactNumber} placeholder="Optional" />
             </div>
           </div>
         </Modal.Body>
@@ -610,14 +575,34 @@ export default function SchoolPage() {
               setOpenCreateBranchModal(false);
             }}
           />
-          <Button
-            placeholder="Decline"
-            callback={() => setOpenCreateBranchModal(false)}
-          />
+          <Button placeholder="Decline" callback={() => setOpenCreateBranchModal(false)} />
         </Modal.Footer>
       </Modal>
 
-      {/* course */}
+      {/* Update Branch Modal */}
+      <Modal show={openUpdateBranchModal} onClose={() => setOpenUpdateBranchModal(false)}>
+        <Modal.Header>Update Branch</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">
+            <div className="mb-2">
+              <label htmlFor="">Branch Address</label>
+              <Input callback={setUpdatedBranchAddress} />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            placeholder="Update Branch"
+            callback={() => {
+              updateBranch();
+              setOpenUpdateBranchModal(false);
+            }}
+          />
+          <Button placeholder="Decline" callback={() => setOpenUpdateBranchModal(false)} />
+        </Modal.Footer>
+      </Modal>
+
+      {/* Create Course Modal */}
       <Modal show={openCourseModal} onClose={() => setOpenCourseModal(false)}>
         <Modal.Header>New Course</Modal.Header>
         <Modal.Body>
@@ -644,10 +629,7 @@ export default function SchoolPage() {
               setOpenCourseModal(false);
             }}
           />
-          <Button
-            placeholder="Decline"
-            callback={() => setOpenCourseModal(false)}
-          />
+          <Button placeholder="Decline" callback={() => setOpenCourseModal(false)} />
         </Modal.Footer>
       </Modal>
 
@@ -716,16 +698,6 @@ export default function SchoolPage() {
             </div>
 
             <div className="mb-2">
-              <label htmlFor="">Student Password</label>
-              <Input type="password" callback={setNewStudentPassword} />
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="">Student Re-Password</label>
-              <Input type="password" callback={setNewStudentPassword} />
-            </div>
-
-            <div className="mb-2">
               <label htmlFor="">Courses</label>
               <Select
                 onChange={(e) => {
@@ -734,9 +706,7 @@ export default function SchoolPage() {
                 required
               >
                 <option>Select a course</option>
-                {courses?.map((i: any) => (
-                  <option value={i._id}>{i.name}</option>
-                ))}
+                {courses?.map((i: any) => <option value={i._id}>{i.name}</option>)}
               </Select>
             </div>
 
@@ -749,9 +719,7 @@ export default function SchoolPage() {
                 required
               >
                 <option>Select a branch</option>
-                {branches?.map((i: any) => (
-                  <option value={i._id}>{i.address}</option>
-                ))}
+                {branches?.map((i: any) => <option value={i._id}>{i.address}</option>)}
               </Select>
             </div>
           </div>
@@ -764,18 +732,12 @@ export default function SchoolPage() {
               setOpenStudentModal(false);
             }}
           />
-          <Button
-            placeholder="Decline"
-            callback={() => setOpenStudentModal(false)}
-          />
+          <Button placeholder="Decline" callback={() => setOpenStudentModal(false)} />
         </Modal.Footer>
       </Modal>
 
       {/* print attendance */}
-      <Modal
-        show={openAttendanceModal}
-        onClose={() => setOpenAttendanceModal(false)}
-      >
+      <Modal show={openAttendanceModal} onClose={() => setOpenAttendanceModal(false)}>
         <Modal.Header>Print Attendance</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
@@ -801,28 +763,18 @@ export default function SchoolPage() {
               setOpenAttendanceModal(false);
             }}
           />
-          <Button
-            placeholder="Decline"
-            callback={() => setOpenAttendanceModal(false)}
-          />
+          <Button placeholder="Decline" callback={() => setOpenAttendanceModal(false)} />
         </Modal.Footer>
       </Modal>
 
       {/* create attendance */}
-      <Modal
-        show={openCreateAttendanceModal}
-        onClose={() => setOpenCreateAttendanceModal(false)}
-      >
+      <Modal show={openCreateAttendanceModal} onClose={() => setOpenCreateAttendanceModal(false)}>
         <Modal.Header>Record Student Attendance</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
             <div className="mb-2">
               <label htmlFor="">Student ID</label>
-              <Input
-                type="text"
-                placeholder="eg. 2400001"
-                callback={setNewAttendanceStudentId}
-              />
+              <Input type="text" placeholder="eg. 2400001" callback={setNewAttendanceStudentId} />
             </div>
             <div className="mb-2">
               <label htmlFor="">Student Course</label>
@@ -833,9 +785,7 @@ export default function SchoolPage() {
                 required
               >
                 <option>Select a course</option>
-                {courses?.map((i: any) => (
-                  <option value={i._id}>{i.name}</option>
-                ))}
+                {courses?.map((i: any) => <option value={i._id}>{i.name}</option>)}
               </Select>
             </div>
             <div className="mb-2">
@@ -847,26 +797,16 @@ export default function SchoolPage() {
                 required
               >
                 <option>Select a branch</option>
-                {branches?.map((i: any) => (
-                  <option value={i._id}>{i.address}</option>
-                ))}
+                {branches?.map((i: any) => <option value={i._id}>{i.address}</option>)}
               </Select>
             </div>
             <div className="mb-2">
               <label htmlFor="">Student Time In</label>
-              <Input
-                type="time"
-                placeholder="test"
-                callback={setNewAttendanceTimeIn}
-              />
+              <Input type="time" placeholder="test" callback={setNewAttendanceTimeIn} />
             </div>
             <div className="mb-2">
               <label htmlFor="">Student Time Out</label>
-              <Input
-                type="time"
-                placeholder="test"
-                callback={setNewAttendanceTimeOut}
-              />
+              <Input type="time" placeholder="test" callback={setNewAttendanceTimeOut} />
             </div>
             <label htmlFor="">Date Attended</label>
             <div className="mb-2">
@@ -886,14 +826,11 @@ export default function SchoolPage() {
               setOpenCreateAttendanceModal(false);
             }}
           />
-          <Button
-            placeholder="Decline"
-            callback={() => setOpenCreateAttendanceModal(false)}
-          />
+          <Button placeholder="Decline" callback={() => setOpenCreateAttendanceModal(false)} />
         </Modal.Footer>
       </Modal>
 
-      {/* Edit Branch */}
+      {/* Enroll Student */}
       <Modal show={openStudentModal} onClose={() => setOpenStudentModal(false)}>
         <Modal.Header>New Student</Modal.Header>
         <Modal.Body>
@@ -901,11 +838,6 @@ export default function SchoolPage() {
             <div className="mb-2">
               <label htmlFor="">Student First name</label>
               <Input callback={setNewStudentFirstName} />
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="">Student Middle Name</label>
-              <Input callback={setNewStudentMiddleName} />
             </div>
 
             <div className="mb-2">
@@ -934,40 +866,6 @@ export default function SchoolPage() {
             </div>
 
             <div className="mb-2">
-              <label htmlFor="">Student Birthday</label>
-              <Input callback={setNewStudentBirthday} />
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="">Student Gender</label>
-              <Select
-                onChange={(e) => {
-                  setNewStudentGender(e.target.value);
-                }}
-                required
-              >
-                <option>Pick your gender</option>
-                <option>Male</option>
-                <option>Female</option>
-              </Select>
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="">Student LTO Client ID</label>
-              <Input callback={setNewStudentLtoClientId} />
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="">Student Password</label>
-              <Input type="password" callback={setNewStudentPassword} />
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="">Student Re-Password</label>
-              <Input type="password" callback={setNewStudentPassword} />
-            </div>
-
-            <div className="mb-2">
               <label htmlFor="">Courses</label>
               <Select
                 onChange={(e) => {
@@ -976,9 +874,7 @@ export default function SchoolPage() {
                 required
               >
                 <option>Select a course</option>
-                {courses?.map((i: any) => (
-                  <option value={i._id}>{i.name}</option>
-                ))}
+                {courses?.map((i: any) => <option value={i._id}>{i.name}</option>)}
               </Select>
             </div>
 
@@ -991,9 +887,7 @@ export default function SchoolPage() {
                 required
               >
                 <option>Select a branch</option>
-                {branches?.map((i: any) => (
-                  <option value={i._id}>{i.address}</option>
-                ))}
+                {branches?.map((i: any) => <option value={i._id}>{i.address}</option>)}
               </Select>
             </div>
           </div>
@@ -1006,10 +900,7 @@ export default function SchoolPage() {
               setOpenStudentModal(false);
             }}
           />
-          <Button
-            placeholder="Decline"
-            callback={() => setOpenStudentModal(false)}
-          />
+          <Button placeholder="Decline" callback={() => setOpenStudentModal(false)} />
         </Modal.Footer>
       </Modal>
     </div>
