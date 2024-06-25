@@ -8,7 +8,7 @@ export default function SchoolRegisterPage() {
   const schoolService = new SchoolService();
   const navigate = useNavigate();
 
-  const [user] = useContext(UserContext);
+  // const [user] = useContext(UserContext);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -41,31 +41,19 @@ export default function SchoolRegisterPage() {
           <label htmlFor="" className="block">
             Driving School Name
           </label>
-          <Input
-            type="text"
-            placeholder="eg. A1C Driving School"
-            callback={setName}
-          />
+          <Input type="text" placeholder="eg. A1C Driving School" callback={setName} />
         </div>
         <div className="block mb-6">
           <label htmlFor="" className="block">
             Driving School Administrator Email
           </label>
-          <Input
-            type="email"
-            placeholder="eg. driving.school@email.com"
-            callback={setEmail}
-          />
+          <Input type="email" placeholder="eg. driving.school@email.com" callback={setEmail} />
         </div>
         <div className="block mb-6">
           <label htmlFor="" className="block">
             Driving School Phone Number
           </label>
-          <Input
-            type="text"
-            placeholder="eg. 09123456789"
-            callback={setPhone}
-          />
+          <Input type="text" placeholder="eg. 09123456789" callback={setPhone} />
         </div>
         <div className="block mb-6">
           <label htmlFor="" className="block">

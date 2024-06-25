@@ -15,7 +15,7 @@ import StudentService from "../services/student-service";
 import AttendanceService from "../services/attendance-service";
 import InlineButton from "../components/inline-button-component";
 
-import { HiTrash, HiPencil, HiUserCircle, HiStatusOffline, HiClipboardList } from "react-icons/hi";
+import { HiTrash, HiPencil, HiUserCircle, HiClipboardList } from "react-icons/hi";
 
 export default function SchoolPage() {
   const schoolService = new SchoolService();
@@ -38,13 +38,13 @@ export default function SchoolPage() {
   const [newStudentEmail, setNewStudentEmail] = useState<string>("");
   const [newStudentCourse, setNewStudentCourse] = useState<string>("");
   const [newStudentBranch, setNewStudentBranch] = useState<string>("");
-  const [newStudentGender, setNewStudentGender] = useState<string>("");
+  const [, setNewStudentGender] = useState<string>("");
   const [newStudentAddress, setNewStudentAddress] = useState<string>("");
-  const [newStudentBirthday, setNewStudentBirthday] = useState<string>("");
+  const [, setNewStudentBirthday] = useState<string>("");
   const [newStudentLastName, setNewStudentLastName] = useState<string>("");
   const [newStudentFirstName, setNewStudentFirstName] = useState<string>("");
-  const [newStudentMiddleName, setNewStudentMiddleName] = useState<string>("");
-  const [newStudentLtoClientId, setNewStudentLtoClientId] = useState<string>("");
+  const [, setNewStudentMiddleName] = useState<string>("");
+  const [, setNewStudentLtoClientId] = useState<string>("");
   const [newStudentMarriageLastName, setNewStudentMarriageLastName] = useState<string>("");
 
   const [school, setSchool] = useState<any>();
@@ -91,6 +91,7 @@ export default function SchoolPage() {
         setAttendances(result);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [search, setSearch] = useState<string>("");
