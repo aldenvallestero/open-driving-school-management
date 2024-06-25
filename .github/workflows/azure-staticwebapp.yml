@@ -2,10 +2,10 @@ name: Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["DEV"]
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches: [ "main" ]
+    branches: ["DEV"]
 
 env:
   APP_LOCATION: "/"
