@@ -32,12 +32,8 @@ export default function SchoolLoginPage() {
   return (
     <div className="container-fluid grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 auto-rows-max bg-slate-200 min-h-screen">
       <div className="p-10">
-        <h1 className="text-6xl font-bold text-amber-800 mb-1">
-          Driving School Powerhouse.
-        </h1>
-        <p className="text-4xl font-bold text-gray-800">
-          A software that can automate 90% of the job.
-        </p>
+        <h1 className="text-6xl font-bold text-amber-800 mb-1">Driving School Powerhouse.</h1>
+        <p className="text-4xl font-bold text-gray-800">An app that can automate 90% of the job.</p>
       </div>
 
       <div className="p-10">
@@ -45,11 +41,7 @@ export default function SchoolLoginPage() {
           <label htmlFor="" className="block">
             Email Address
           </label>
-          <Input
-            type="text"
-            placeholder="eg. example@email.com"
-            callback={setEmail}
-          />
+          <Input type="text" placeholder="eg. example@email.com" callback={setEmail} />
         </div>
         <div className="block mb-10">
           <label htmlFor="" className="block">

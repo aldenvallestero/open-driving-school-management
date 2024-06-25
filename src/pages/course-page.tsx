@@ -1,16 +1,16 @@
-import QRCode from "react-qr-code";
-import pic from "../media/pic-media.jpeg";
+// import QRCode from "react-qr-code";
+// import pic from "../media/pic-media.jpeg";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
 import CourseService from "../services/course-service";
 import { useContext, useEffect, useState } from "react";
-import StudentService from "../services/student-service";
+// import StudentService from "../services/student-service";
 import EnrollmentService from "../services/enrollment-service";
 
 export default function CoursePage() {
   const courseService = new CourseService();
-  const studentService = new StudentService();
+  // const studentService = new StudentService();
   const enrollmentService = new EnrollmentService();
   const [user] = useContext(UserContext);
   const navigate = useNavigate();
@@ -41,10 +41,7 @@ export default function CoursePage() {
           <span className="block mb-2">{course.name}</span>
           <p>{course.description}</p>
           <span className="block mb-2">{course.price}</span>
-          <Button
-            placeholder="Enroll"
-            callback={() => handleEnrollment(course)}
-          />
+          <Button placeholder="Enroll" callback={() => handleEnrollment(course)} />
         </div>
       ))}
     </div>

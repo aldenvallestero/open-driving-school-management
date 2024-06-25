@@ -28,7 +28,8 @@ export default function SchoolPage() {
 
   const [openCreateBranchModal, setOpenCreateBranchModal] = useState<boolean>(false);
   const [openUpdateBranchModal, setOpenUpdateBranchModal] = useState<boolean>(false);
-  const [openCourseModal, setOpenCourseModal] = useState<boolean>(false);
+  const [openCreateCourseModal, setOpenCreateCourseModal] = useState<boolean>(false);
+  const [openUpdateCourseModal, setOpenUpdateCourseModal] = useState<boolean>(false);
   const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
   const [openAttendanceModal, setOpenAttendanceModal] = useState<boolean>(false);
   const [openCreateAttendanceModal, setOpenCreateAttendanceModal] = useState<boolean>(false);
@@ -228,11 +229,19 @@ export default function SchoolPage() {
 
   const printAttendance = () => {};
 
-  const deleteBranch = (branchId: any) => {
-    if (window.confirm("U sure?")) {
+  const deleteBranch = (branchId: string) => {
+    if (window.confirm("Are you sure you want to delete this branch?")) {
       branchService.deleteBranch(schoolToken, branchId);
-      const newBranches = branches.filter((x: any) => x._id !== branchId);
-      setBranches(newBranches);
+      const updatedBranchList = branches.filter((x: any) => x._id !== branchId);
+      setBranches(updatedBranchList);
+    }
+  };
+
+  const deleteCourse = (courseId: string) => {
+    if (window.confirm("Are you sure you want to delete this course?")) {
+      // courseService.deleteCourse(schoolToken, courseId);
+      const updatedCourseList = courses.filter((x: any) => x._id !== courseId);
+      setCourses(updatedCourseList);
     }
   };
 
@@ -408,7 +417,10 @@ export default function SchoolPage() {
           {branches && (
             <div className="mb-4">
               <div className="w-32 mb-4">
-                <Button placeholder="Create Course" callback={() => setOpenCourseModal(true)} />
+                <Button
+                  placeholder="Create Course"
+                  callback={() => setOpenCreateCourseModal(true)}
+                />
               </div>
               <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -450,18 +462,24 @@ export default function SchoolPage() {
                         <td className="px-6 py-4">{course.price}</td>
                         <td className="px-6 py-4">{course.students.length}</td>
                         <td className="px-6 py-4">
-                          <button className="flex align-middle justify-center items-center">
+                          <button
+                            className="flex align-middle justify-center items-center"
+                            onClick={() => setOpenUpdateCourseModal(true)}
+                          >
                             <HiPencil />
                             Edit Course
                           </button>
-                          <button className="flex align-middle justify-center items-center">
+                          <button
+                            className="flex align-middle justify-center items-center text-red-800"
+                            onClick={() => deleteCourse(course._id)}
+                          >
                             <HiTrash />
                             Delete Course
                           </button>
-                          <button className="flex align-middle justify-center items-center">
+                          {/* <button className="flex align-middle justify-center items-center">
                             <HiStatusOffline />
                             Disable / Enable Course
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     ))}
@@ -603,7 +621,7 @@ export default function SchoolPage() {
       </Modal>
 
       {/* Create Course Modal */}
-      <Modal show={openCourseModal} onClose={() => setOpenCourseModal(false)}>
+      <Modal show={openCreateCourseModal} onClose={() => setOpenCreateCourseModal(false)}>
         <Modal.Header>New Course</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
@@ -626,10 +644,41 @@ export default function SchoolPage() {
             placeholder="Create Course"
             callback={() => {
               createCourse();
-              setOpenCourseModal(false);
+              setOpenCreateCourseModal(false);
             }}
           />
-          <Button placeholder="Decline" callback={() => setOpenCourseModal(false)} />
+          <Button placeholder="Decline" callback={() => setOpenCreateCourseModal(false)} />
+        </Modal.Footer>
+      </Modal>
+
+      {/* Update Course Modal */}
+      <Modal show={openUpdateCourseModal} onClose={() => setOpenUpdateCourseModal(false)}>
+        <Modal.Header>Update Course</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">
+            <div className="mb-2">
+              <label htmlFor="">Course Name</label>
+              <Input callback={setNewCourseName} />
+            </div>
+            <div className="mb-2">
+              <label htmlFor="">Course Description</label>
+              <Input callback={setNewCourseDescription} />
+            </div>
+            <div className="mb-2">
+              <label htmlFor="">Course Cost</label>
+              <Input callback={setNewCoursePrice} />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            placeholder="Update Course"
+            callback={() => {
+              // updateCourse();
+              setOpenUpdateCourseModal(false);
+            }}
+          />
+          <Button placeholder="Decline" callback={() => setOpenUpdateCourseModal(false)} />
         </Modal.Footer>
       </Modal>
 
