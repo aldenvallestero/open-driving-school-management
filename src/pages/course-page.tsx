@@ -3,10 +3,8 @@
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
-import CourseService from "../services/course-service";
 import { useContext, useEffect, useState } from "react";
-// import StudentService from "../services/student-service";
-import EnrollmentService from "../services/enrollment-service";
+import { CourseService, EnrollmentService } from "../services";
 
 export default function CoursePage() {
   const courseService = new CourseService();

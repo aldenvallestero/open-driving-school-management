@@ -1,6 +1,6 @@
 import AxiosClient from "../client/axios-client";
 
-export default class SchoolService extends AxiosClient {
+export class SchoolService extends AxiosClient {
   async register(school: any) {
     try {
       const { data } = await this.schoolClient.post("/register", { ...school });

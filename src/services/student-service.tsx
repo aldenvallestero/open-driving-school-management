@@ -1,7 +1,7 @@
 import AxiosClient from "../client/axios-client";
 import { TRegister } from "../commons/type-common";
 
-class StudentService extends AxiosClient {
+export class StudentService extends AxiosClient {
   async login(email: string, password: string) {
     try {
       const { data } = await this.studentClient.post("/login", {
@@ -87,5 +87,3 @@ class StudentService extends AxiosClient {
     }
   }
 }
-
-export default StudentService;

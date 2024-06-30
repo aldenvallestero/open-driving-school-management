@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 import AxiosClient from "../client/axios-client";
 
-class AttendanceService extends AxiosClient {
+export class AttendanceService extends AxiosClient {
   constructor() {
     super();
   }
@@ -49,5 +49,3 @@ class AttendanceService extends AxiosClient {
     // return data
   }
 }
-
-export default AttendanceService;

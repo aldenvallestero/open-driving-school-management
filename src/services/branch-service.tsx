@@ -1,6 +1,6 @@
 import AxiosClient from "../client/axios-client";
 
-export default class BranchService extends AxiosClient {
+export class BranchService extends AxiosClient {
   async createBranch(token: string, branch: any) {
     try {
       const { data } = await this.branchClient.post("/", branch, {

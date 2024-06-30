@@ -1,9 +1,9 @@
+import { SchoolService } from "../services";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/input-component";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
-import SchoolService from "../services/school-service";
 
 export default function SchoolLoginPage() {
   const schoolService = new SchoolService();

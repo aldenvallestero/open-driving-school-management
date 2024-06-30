@@ -1,6 +1,6 @@
 import AxiosClient from "../client/axios-client";
 
-export default class CourseService extends AxiosClient {
+export class CourseService extends AxiosClient {
   async createCourse({ name, description, price, schoolToken }: any) {
     try {
       const { data } = await this.courseClient.post(

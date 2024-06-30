@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../components/input-component";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
-import SchoolService from "../services/school-service";
+import { SchoolService } from "../services";
 export default function SchoolRegisterPage() {
   const schoolService = new SchoolService();
   const navigate = useNavigate();

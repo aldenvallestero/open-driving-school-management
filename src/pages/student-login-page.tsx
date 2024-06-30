@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../components/input-component";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
-import StudentService from "../services/student-service";
+import { StudentService } from "../services";
 
 export default function StudentLoginPage() {
   const studentService = new StudentService();
@@ -43,11 +43,7 @@ export default function StudentLoginPage() {
           <label htmlFor="" className="block">
             Email or Username
           </label>
-          <Input
-            type="text"
-            placeholder="eg. juandelacruz"
-            callback={setEmail}
-          />
+          <Input type="text" placeholder="eg. juandelacruz" callback={setEmail} />
         </div>
         <div className="block mb-4">
           <label htmlFor="" className="block">

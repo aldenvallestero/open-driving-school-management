@@ -7,15 +7,18 @@ import Alert from "../components/alert-component";
 import Input from "../components/input-component";
 import { UserContext } from "../contexts/Context";
 import Button from "../components/button-component";
-import SchoolService from "../services/school-service";
-import BranchService from "../services/branch-service";
-import CourseService from "../services/course-service";
 import { useContext, useEffect, useState } from "react";
-import StudentService from "../services/student-service";
-import AttendanceService from "../services/attendance-service";
 import InlineButton from "../components/inline-button-component";
 
 import { HiTrash, HiPencil, HiUserCircle, HiClipboardList } from "react-icons/hi";
+
+import {
+  SchoolService,
+  BranchService,
+  CourseService,
+  StudentService,
+  AttendanceService,
+} from "../services";
 
 export default function SchoolPage() {
   const schoolService = new SchoolService();
@@ -92,7 +95,7 @@ export default function SchoolPage() {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [courses]);
 
   const [search, setSearch] = useState<string>("");
   const [newCourseName, setNewCourseName] = useState<string>();
@@ -470,13 +473,18 @@ export default function SchoolPage() {
                             <HiPencil />
                             Edit Course
                           </button>
-                          <button
-                            className="flex align-middle justify-center items-center text-red-800"
-                            onClick={() => deleteCourse(course._id)}
-                          >
-                            <HiTrash />
-                            Delete Course
-                          </button>
+
+                          {course.students.length > 0 ? (
+                            <></>
+                          ) : (
+                            <button
+                              className="flex align-middle justify-center items-center text-red-800"
+                              onClick={() => deleteCourse(course._id)}
+                            >
+                              <HiTrash />
+                              Delete Course
+                            </button>
+                          )}
                           {/* <button className="flex align-middle justify-center items-center">
                             <HiStatusOffline />
                             Disable / Enable Course
@@ -509,7 +517,7 @@ export default function SchoolPage() {
                         #
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        Address
+                        School Branch Address
                       </th>
                       <th scope="col" className="px-6 py-3">
                         Total # of Students
@@ -529,7 +537,15 @@ export default function SchoolPage() {
                           <a href={`/branch/${branches._id}`}>{index + 1}</a>
                         </th>
                         <td className="px-6 py-4">
-                          <a href={`/branch/${branches._id}`}>{branches.address}</a>
+                          <a href={`/branch/${branches._id}`} className="block font-bold text-lg">
+                            Address: {branches.address}
+                          </a>
+                          <a href={`/branch/${branches._id}`} className="block">
+                            Contact Person: {branches?.contactPerson}
+                          </a>
+                          <a href={`/branch/${branches._id}`} className="block">
+                            Contact Number: {branches?.contactNumber}
+                          </a>
                         </td>
                         <td className="px-6 py-4">{branches.students.length}</td>
                         <td className="px-6 py-4">
