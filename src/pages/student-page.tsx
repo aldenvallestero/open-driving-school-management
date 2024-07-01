@@ -86,30 +86,30 @@ export default function StudentPage() {
         <h1 className="text-2xl font-bold mb-2">Personal Information</h1>
         <div className="mb-2">
           <label htmlFor="">Address</label>
-          <Input type="text" callback={setAddress} />
+          <Input type="text" callback={setAddress} initialValue={address} />
         </div>
 
         <div className="mb-2">
           <label htmlFor="">Email</label>
-          <Input type="text" callback={setAddress} />
+          <Input type="text" callback={setAddress} initialValue={email} />
         </div>
 
         <div className="mb-2">
           <label htmlFor="">Phone</label>
-          <Input type="text" callback={setAddress} />
+          <Input type="text" callback={setAddress} initialValue={phone} />
         </div>
         <div className="mb-2">
           <label htmlFor="">Gender</label>
-          <Input type="text" callback={setAddress} />
+          <Input type="text" callback={setAddress} initialValue={gender} />
         </div>
 
         <div className="mb-2">
           <label htmlFor="">Birthday</label>
-          <Input type="text" callback={setAddress} />
+          <Input type="text" callback={setAddress} initialValue={birthday} />
         </div>
         <div className="mb-2">
           <label htmlFor="">LTO Client ID</label>
-          <Input type="text" callback={setAddress} />
+          <Input type="text" callback={setAddress} initialValue={ltoClientId} />
         </div>
         <span className="flex">
           Registration Date: {createdAt && moment(createdAt).format("MMMM DD, YYYY")}

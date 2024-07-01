@@ -2,6 +2,7 @@ export type TInput = {
   type?: string;
   placeholder?: string;
   callback: (data: string) => void;
+  initialValue?: string;
 };
 
 export type TButton = {

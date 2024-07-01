@@ -4,6 +4,7 @@ export default function Input({
   type = "text",
   placeholder = "",
   callback,
+  initialValue = "",
 }: TInput) {
   return (
     <input
@@ -11,6 +12,7 @@ export default function Input({
       className="text-black p-2 w-full rounded-md"
       placeholder={placeholder}
       onChange={(data) => callback(data.target.value)}
+      value={initialValue}
     />
   );
 }
