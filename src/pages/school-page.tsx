@@ -95,7 +95,7 @@ export default function SchoolPage() {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses]);
+  }, []);
 
   const [search, setSearch] = useState<string>("");
   const [newCourseName, setNewCourseName] = useState<string>();
@@ -190,22 +190,21 @@ export default function SchoolPage() {
     if (
       newAttendanceTimeIn &&
       newAttendanceTimeOut &&
-      newAttendanceCourseId &&
       newAttendanceStudentId &&
-      newAttendanceDate &&
-      newAttendanceBranchId
+      newAttendanceDate
     ) {
       const newAttendance = {
         status: "Credited",
         in: newAttendanceTimeIn,
         out: newAttendanceTimeOut,
         date: newAttendanceDate,
-        course: newAttendanceCourseId,
-        branch: newAttendanceBranchId,
         student: newAttendanceStudentId,
       };
 
       attendanceService.createAttendance(schoolToken, newAttendance);
+
+      setOpenCreateAttendanceModal(false);
+
       alert("Attendance recorded!");
 
       setNewAttendanceDate(undefined);

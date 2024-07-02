@@ -2,7 +2,7 @@ export type TInput = {
   type?: string;
   placeholder?: string;
   callback: (data: string) => void;
-  initialValue?: string;
+  defaultValue?: string;
 };
 
 export type TButton = {

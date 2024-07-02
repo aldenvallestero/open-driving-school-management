@@ -86,4 +86,25 @@ export class StudentService extends AxiosClient {
       return undefined;
     }
   }
+
+  async updateStudent(token: string, student: any) {
+    try {
+      const { data } = await this.studentClient.put(
+        `/${student.studentId}`,
+        {
+          ...student,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }

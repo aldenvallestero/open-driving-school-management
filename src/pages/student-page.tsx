@@ -14,12 +14,12 @@ export default function StudentPage() {
   const enrollmentService = new EnrollmentService();
 
   const [name, setName] = useState<string>("");
-  const [, setEmail] = useState<string>("");
-  const [, setAddress] = useState<string>("");
-  const [, setPhone] = useState<string>("");
-  const [, setGender] = useState<string>("Gender");
-  const [, setBirthday] = useState<string>("");
-  const [, setLtoClientId] = useState<string>("XX-XXXXXX-XXXXXXX");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [gender, setGender] = useState<string>("Gender");
+  const [birthday, setBirthday] = useState<string>("");
+  const [ltoClientId, setLtoClientId] = useState<string>("XX-XXXXXX-XXXXXXX");
   const [createdAt, setCreatedAt] = useState<string>("");
   const [status, setStatus] = useState<string>("PDC - Passed");
 
@@ -77,6 +77,23 @@ export default function StudentPage() {
     }
   };
 
+  const updateStudent = () => {
+    const studentData = {
+      studentId,
+      name,
+      email,
+      address,
+      phone,
+      gender,
+      birthday,
+      ltoClientId,
+      status,
+    };
+    studentService.updateStudent(user, studentData);
+
+    alert("Update done!");
+  };
+
   return (
     <div className="container-fluid bg-slate-200 p-6">
       <h1 className="font-bold text-3xl">{name}</h1>
@@ -86,34 +103,35 @@ export default function StudentPage() {
         <h1 className="text-2xl font-bold mb-2">Personal Information</h1>
         <div className="mb-2">
           <label htmlFor="">Address</label>
-          <Input type="text" callback={setAddress} initialValue={address} />
+          <Input type="text" callback={setAddress} defaultValue={address} />
         </div>
 
         <div className="mb-2">
           <label htmlFor="">Email</label>
-          <Input type="text" callback={setAddress} initialValue={email} />
+          <Input type="text" callback={setEmail} defaultValue={email} />
         </div>
 
         <div className="mb-2">
           <label htmlFor="">Phone</label>
-          <Input type="text" callback={setAddress} initialValue={phone} />
+          <Input type="text" callback={setPhone} defaultValue={phone} />
         </div>
         <div className="mb-2">
           <label htmlFor="">Gender</label>
-          <Input type="text" callback={setAddress} initialValue={gender} />
+          <Input type="text" callback={setGender} defaultValue={gender} />
         </div>
 
         <div className="mb-2">
           <label htmlFor="">Birthday</label>
-          <Input type="text" callback={setAddress} initialValue={birthday} />
+          <Input type="text" callback={setBirthday} defaultValue={birthday} />
         </div>
         <div className="mb-2">
           <label htmlFor="">LTO Client ID</label>
-          <Input type="text" callback={setAddress} initialValue={ltoClientId} />
+          <Input type="text" callback={setLtoClientId} defaultValue={ltoClientId} />
         </div>
         <span className="flex">
           Registration Date: {createdAt && moment(createdAt).format("MMMM DD, YYYY")}
         </span>
+        <Button placeholder="Update Student Information" callback={updateStudent} />
       </div>
 
       <div className="block shadow-md border-s-8 border-blue-800 rounded-md p-4 mb-4">
