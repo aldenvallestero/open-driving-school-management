@@ -12,6 +12,17 @@ export class BranchService extends AxiosClient {
     }
   }
 
+  async getBranchById(token: string, branchId: string) {
+    try {
+      const { data } = await this.branchClient.get(`/${branchId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async getAllBranchesBySchoolId(token: string) {
     try {
       const { data } = await this.branchClient.get("/", {

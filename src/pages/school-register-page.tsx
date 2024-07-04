@@ -8,13 +8,12 @@ export default function SchoolRegisterPage() {
   const schoolService = new SchoolService();
   const navigate = useNavigate();
 
-  // const [user] = useContext(UserContext);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
-  const [, setUser] = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   const handleRegister = async () => {
     if (password !== repeatPassword) {

@@ -4,13 +4,14 @@ import Input from "../components/input-component";
 import Button from "../components/button-component";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { StudentService, EnrollmentService } from "../services";
+import { StudentService, EnrollmentService, BranchService } from "../services";
+import Chart from "react-apexcharts";
 
-export default function StudentPage() {
+export default function BranchPage() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const { studentId } = useParams();
-  const studentService = new StudentService();
+  const { branchId } = useParams();
+  const branchService = new BranchService();
   const enrollmentService = new EnrollmentService();
 
   const [name, setName] = useState<string>("");
@@ -32,67 +33,42 @@ export default function StudentPage() {
       return;
     }
 
-    if (studentId) {
-      studentService.getStudentById(studentId, user).then((result: any) => {
+    if (branchId) {
+      branchService.getBranchById(user, branchId).then((result: any) => {
         if (result) {
-          setName(
-            `${result.lastName}, ${result.firstName}${result.middleName ? `, ${result.middleName}` : ""}${result.marriageLastName ? `, ${result.marriageLastName}` : ""}`,
-          );
-          setEmail(result?.email);
-          setAddress(result?.address);
-          setPhone(result?.phone);
-          setLtoClientId(result?.ltoClientId);
-          setGender(result?.gender);
-          setBirthday(result?.birthday);
-          setStatus(result?.status);
-          setCourses(result.courses);
-          setEnrollment(result.enrollment);
-          setCreatedAt(result?.createdAt);
-        }
-      });
-    } else {
-      studentService.getStudent(user).then((result: any) => {
-        if (result) {
-          setName(
-            `${result.lastName}, ${result.firstName}, ${result.middleName}${result.marriageLastName ? `, ${result.marriageLastName}` : ""}`,
-          );
-          setAddress(result?.address);
-          setPhone(result?.phone);
-          setLtoClientId(result?.ltoClientId);
-          setGender(result?.gender);
-          setBirthday(result?.birthday);
-          setStatus(result?.status);
-          setCourses(result.courses);
-          setEnrollment(result.enrollment);
-          setCreatedAt(result.createdAt);
+          console.log(result);
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const markCourseAsPaid = (enrollmentId: string) => {
-    if (window.confirm("Are you sure this student has paid their balance?")) {
-      enrollmentService.updateEnrollment(enrollmentId, { paymentStatus: "PAID" });
-    }
-  };
+  // const markCourseAsPaid = (enrollmentId: string) => {
+  //   if (window.confirm("Are you sure this student has paid their balance?")) {
+  //     enrollmentService.updateEnrollment(enrollmentId, { paymentStatus: "PAID" });
+  //   }
+  // };
 
-  const updateStudent = () => {
-    const studentData = {
-      studentId,
-      name,
-      email,
-      address,
-      phone,
-      gender,
-      birthday,
-      ltoClientId,
-      status,
-    };
-    studentService.updateStudent(user, studentData);
+  // const updateStudent = () => {
+  //   const studentData = {
+  //     studentId,
+  //     name,
+  //     email,
+  //     address,
+  //     phone,
+  //     gender,
+  //     birthday,
+  //     ltoClientId,
+  //     status,
+  //   };
+  //   studentService.updateStudent(user, studentData);
 
-    alert("Update done!");
-  };
+  //   alert("Update done!");
+  // };
+
+  const generateBranchReport = () => {};
+
+  // const myChart = new Chart(ctx, {});
 
   return (
     <div className="container-fluid bg-slate-200 p-6">
@@ -100,38 +76,26 @@ export default function StudentPage() {
       <span className="bg-green-600 text-white font-bold px-2 py-1 rounded-sm">{status}</span>
 
       <div className="block p-4 my-6">
-        <h1 className="text-2xl font-bold mb-2">Personal Information</h1>
+        <div style={{ width: 800 }}>
+          <canvas id="acquisitions"></canvas>
+        </div>
+        <h1 className="text-2xl font-bold mb-2">Branch Information</h1>
         <div className="mb-2">
           <label htmlFor="">Address</label>
           <Input type="text" callback={setAddress} defaultValue={address} />
         </div>
 
         <div className="mb-2">
-          <label htmlFor="">Email</label>
+          <label htmlFor="">Contact Person</label>
           <Input type="text" callback={setEmail} defaultValue={email} />
         </div>
 
         <div className="mb-2">
-          <label htmlFor="">Phone</label>
+          <label htmlFor="">Contact Number</label>
           <Input type="text" callback={setPhone} defaultValue={phone} />
         </div>
-        <div className="mb-2">
-          <label htmlFor="">Gender</label>
-          <Input type="text" callback={setGender} defaultValue={gender} />
-        </div>
-
-        <div className="mb-2">
-          <label htmlFor="">Birthday</label>
-          <Input type="text" callback={setBirthday} defaultValue={birthday} />
-        </div>
-        <div className="mb-2">
-          <label htmlFor="">LTO Client ID</label>
-          <Input type="text" callback={setLtoClientId} defaultValue={ltoClientId} />
-        </div>
-        <span className="flex">
-          Registration Date: {createdAt && moment(createdAt).format("MMMM DD, YYYY")}
-        </span>
-        <Button placeholder="Update Student Information" callback={updateStudent} />
+        {/* <Button placeholder="Update Student Information" callback={updateStudent} /> */}
+        <Button placeholder="Generate Branch Report" callback={generateBranchReport} />
       </div>
 
       <div className="block shadow-md border-s-8 border-blue-800 rounded-md p-4 mb-4">
@@ -238,7 +202,7 @@ export default function StudentPage() {
                       <Button
                         placeholder="Mark as paid"
                         callback={() => {
-                          markCourseAsPaid(enrollment?._id);
+                          // markCourseAsPaid(enrollment?._id);
                         }}
                       />
                     </td>

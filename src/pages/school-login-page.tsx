@@ -11,7 +11,7 @@ export default function SchoolLoginPage() {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [, setUser] = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
     const token: string = await schoolService.login(email, password);

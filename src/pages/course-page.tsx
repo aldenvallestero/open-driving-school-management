@@ -10,7 +10,7 @@ export default function CoursePage() {
   const courseService = new CourseService();
   // const studentService = new StudentService();
   const enrollmentService = new EnrollmentService();
-  const [user] = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [courses, setCourses] = useState<any>();

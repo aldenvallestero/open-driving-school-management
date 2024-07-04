@@ -13,7 +13,7 @@ export default function StudentRegisterPage() {
 
   const navigate = useNavigate();
 
-  const [, setUser] = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const [course, setCourse] = useState<any>();
   const [phone, setPhone] = useState<string>();
   const [email, setEmail] = useState<string>();

@@ -11,7 +11,7 @@ export default function StudentLoginPage() {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [user, setUser] = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
     const token: string = await studentService.login(email, password);
