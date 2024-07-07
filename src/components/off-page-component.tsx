@@ -3,6 +3,7 @@ import { Drawer } from "flowbite-react";
 import { UserContext } from "../contexts/Context";
 
 import { Page, Text, View, Document, StyleSheet, PDFViewer, Image } from "@react-pdf/renderer";
+import PDFview from "../pages/pdf-page";
 
 export function OffPage() {
   const { isDrawerOpen, handleDrawer } = useContext(UserContext);
@@ -34,41 +35,7 @@ export function OffPage() {
   return (
     <Drawer open={isDrawerOpen} onClose={() => handleDrawer(false)}>
       <Drawer.Items>
-        <PDFViewer style={{ width: "60em", height: "100em" }}>
-          <Document
-            title="PDF Document Title"
-            author="Whoever wrote this"
-            subject="Just a title"
-            pageLayout="singlePage"
-          >
-            <Page size="A4" style={styles.page}>
-              <View style={styles.section}>
-                <Image
-                  style={styles.logo}
-                  src={
-                    "https://www.shutterstock.com/shutterstock/photos/2236640723/display_1500/stock-vector-driving-school-logo-design-vector-templates-2236640723.jpg"
-                  }
-                />
-                <Text style={styles.title}>A1C Driving School</Text>
-                <Text style={{ ...styles.text, marginBottom: 10 }}>
-                  Tumana, Santa Maria, 3022, Bulacan, PH
-                </Text>
-                <Text style={styles.text}>Student Search Result Report</Text>
-
-                <Text style={styles.text}>Name</Text>
-                <Text style={styles.text}>Branch</Text>
-                <Text style={styles.text}>Course</Text>
-                <Text style={styles.text}>Instructor</Text>
-                <Text style={styles.text}>Status</Text>
-              </View>
-            </Page>
-
-            {/* sample/vacant */}
-            <Page size="A4" style={styles.page}>
-              <View style={styles.section}></View>
-            </Page>
-          </Document>
-        </PDFViewer>
+        <PDFview />
       </Drawer.Items>
     </Drawer>
   );

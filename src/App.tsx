@@ -5,12 +5,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const Header = React.lazy(() => import("./components/header-component"));
 
-const IdPage = React.lazy(() => import("./pages/id-page"));
-const CoursePage = React.lazy(() => import("./pages/course-page"));
+const CourseRoute = React.lazy(() => import("./routes/course.route"));
 const BranchRoute = React.lazy(() => import("./routes/branch.route"));
 const LogoutRoute = React.lazy(() => import("./routes/logout.route"));
 const SchoolRoute = React.lazy(() => import("./routes/school.route"));
 const StudentRoute = React.lazy(() => import("./routes/student.route"));
+const StudentIdRoute = React.lazy(() => import("./routes/student-id.route"));
 const SchoolLoginRoute = React.lazy(() => import("./routes/school-login.route"));
 const StudentLoginRoute = React.lazy(() => import("./routes/student-login.route"));
 const SchoolRegisterRoute = React.lazy(() => import("./routes/school-register.route"));
@@ -42,40 +42,27 @@ function App() {
     }
   }, [user]);
 
+  const globalContextVars = { user, setUser, isDrawerOpen, handleDrawer };
+
   return (
-    // ! Context should be in object and not array
-    <UserContext.Provider value={{ user, setUser, isDrawerOpen, handleDrawer }}>
+    <UserContext.Provider value={globalContextVars}>
       <Router>
         <Suspense fallback="Header ...">
           <Header />
         </Suspense>
         <Routes>
-          <Route path="/student/login" element={<StudentLoginRoute />} />
-          <Route path="/school/login" element={<SchoolLoginRoute />} />
+          <Route path="*" element={<SchoolLoginRoute />} />
+          <Route path="/logout" element={<LogoutRoute />} />
+          <Route path="/school" element={<SchoolRoute />} />
+          <Route path="/course" element={<CourseRoute />} />
           <Route path="/student" element={<StudentRoute />} />
+          <Route path="/student/id" element={<StudentIdRoute />} />
+          <Route path="/branch/:branchId" element={<BranchRoute />} />
+          <Route path="/school/login" element={<SchoolLoginRoute />} />
           <Route path="/student/:studentId" element={<StudentRoute />} />
-          <Route
-            path="/id"
-            element={
-              <Suspense fallback="Id ...">
-                <IdPage />
-              </Suspense>
-            }
-          />
+          <Route path="/student/login" element={<StudentLoginRoute />} />
           <Route path="/school/register" element={<SchoolRegisterRoute />} />
           <Route path="/student/register" element={<StudentRegisterRoute />} />
-          <Route path="/school" element={<SchoolRoute />} />
-          <Route
-            path="/course"
-            element={
-              <Suspense fallback="Course ...">
-                <CoursePage />
-              </Suspense>
-            }
-          />
-          <Route path="/branch/:branchId" element={<BranchRoute />} />
-          <Route path="/logout" element={<LogoutRoute />} />
-          <Route path="*" element={<SchoolLoginRoute />} />
         </Routes>
       </Router>
     </UserContext.Provider>

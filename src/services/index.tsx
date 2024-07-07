@@ -1,3 +1,4 @@
+export * from "./note-service";
 export * from "./branch-service";
 export * from "./course-service";
 export * from "./school-service";

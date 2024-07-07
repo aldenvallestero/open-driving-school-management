@@ -2,13 +2,13 @@ import { Page, Text, View, Document, StyleSheet, PDFViewer, Image } from "@react
 
 const styles = StyleSheet.create({
   page: {
-    // flexDirection: "row",
-    // backgroundColor: "#E4E4E4",
+    flexDirection: "column",
+    padding: 10,
   },
   section: {
     margin: 10,
     padding: 10,
-    // flexGrow: 1,
+    flexGrow: 1,
   },
   title: {
     textAlign: "center",
@@ -21,19 +21,80 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     alignSelf: "center",
+    marginBottom: 10,
+  },
+  table: {
+    display: "flex",
+    flexDirection: "column",
+    width: "auto",
+    // borderStyle: "solid",
+    // borderWidth: 1,
+    // borderColor: "#bfbfbf",
+  },
+  tableRow: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  tableCol: {
+    width: "25%",
+    // borderStyle: "solid",
+    // borderWidth: 1,
+    borderColor: "black",
+  },
+  tableCellHeader: {
+    margin: 5,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  tableCell: {
+    margin: 5,
+    fontSize: 10,
   },
 });
 
 export default function PDFview() {
+  const RowHeader = () => {
+    return (
+      <View style={styles.tableRow}>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>#</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Name</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Course</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Branch</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Time in</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Time out</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Date</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Instructor</Text>
+        </View>
+        <View style={styles.tableCol}>
+          <Text style={styles.tableCellHeader}>Status</Text>
+        </View>
+      </View>
+    );
+  };
   return (
-    <PDFViewer style={{ width: "100%", height: "100em" }}>
+    <PDFViewer style={{ width: "60em", height: "100em" }}>
       <Document
         title="PDF Document Title"
         author="Whoever wrote this"
         subject="Just a title"
         pageLayout="singlePage"
       >
-        <Page size="A4" style={styles.page}>
+        <Page size="A4" orientation="landscape" style={styles.page}>
           <View style={styles.section}>
             <Image
               style={styles.logo}
@@ -45,38 +106,48 @@ export default function PDFview() {
             <Text style={{ ...styles.text, marginBottom: 10 }}>
               Tumana, Santa Maria, 3022, Bulacan, PH
             </Text>
-            <Text style={styles.text}>Student Search Result Report</Text>
+            <Text style={{ ...styles.title, marginBottom: 10 }}>Student Search Result Report</Text>
 
-            <Text style={styles.text}>Name</Text>
-            <Text style={styles.text}>Branch</Text>
-            <Text style={styles.text}>Course</Text>
-            <Text style={styles.text}>Instructor</Text>
-            <Text style={styles.text}>Status</Text>
+            <View style={styles.table}>
+              <RowHeader />
+
+              <View style={styles.tableRow}>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>1</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>Alden Vallestero</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>TDC</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>Tumana, Santa Maria, Bulacan</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>10:00 AM</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>04:00 PM</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>01/01/2024</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>Kalbo na aswang</Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>Done</Text>
+                </View>
+              </View>
+            </View>
           </View>
-          {/* <View style={styles.section}>
-            <Text>Section #2</Text>
-          </View> */}
         </Page>
 
-        {/* sample/vacant */}
-        <Page size="A4" style={styles.page}>
-          <View style={styles.section}>
-            <Text>A1C Driving School</Text>
-            <Text>Tumana, Santa Maria, 3022, Bulacan, PH</Text>
-
-            {/* Report Title */}
-            <Text>Student Search Result Report</Text>
-
-            <Text>Name</Text>
-            <Text>Branch</Text>
-            <Text>Course</Text>
-            <Text>Instructor</Text>
-            <Text>Status</Text>
-          </View>
-          {/* <View style={styles.section}>
-            <Text>Section #2</Text>
-          </View> */}
-        </Page>
+        <Page size="A4" style={styles.page}></Page>
+        <Page size="A4" style={styles.page}></Page>
+        <Page size="A4" style={styles.page}></Page>
+        <Page size="A4" style={styles.page}></Page>
       </Document>
     </PDFViewer>
   );

@@ -1,11 +1,12 @@
 import AxiosClient from "../client/axios-client";
 
 export class CourseService extends AxiosClient {
-  async createCourse({ name, description, price, schoolToken }: any) {
+  async createCourse(schoolToken: string, newCourse: any) {
     try {
+      console.log("schoolToken", schoolToken);
       const { data } = await this.courseClient.post(
         "/",
-        { ...{ name, description, price } },
+        { ...newCourse },
         { headers: { Authorization: "Bearer " + schoolToken } },
       );
       return data;

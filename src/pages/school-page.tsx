@@ -10,9 +10,10 @@ import Button from "../components/button-component";
 import { useContext, useEffect, useState } from "react";
 import InlineButton from "../components/inline-button-component";
 
-import { HiTrash, HiPencil, HiUserCircle, HiClipboardList } from "react-icons/hi";
+import { HiTrash, HiPencil, HiUserCircle, HiClipboardList, HiNewspaper } from "react-icons/hi";
 
 import {
+  NoteService,
   SchoolService,
   BranchService,
   CourseService,
@@ -22,6 +23,7 @@ import {
 import { OffPage } from "../components/off-page-component";
 
 export default function SchoolPage() {
+  const noteService = new NoteService();
   const schoolService = new SchoolService();
   const branchService = new BranchService();
   const courseService = new CourseService();
@@ -37,6 +39,7 @@ export default function SchoolPage() {
   const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
   const [openAttendanceModal, setOpenAttendanceModal] = useState<boolean>(false);
   const [openCreateAttendanceModal, setOpenCreateAttendanceModal] = useState<boolean>(false);
+  const [openBranchNotesModal, setOpenBranchNotesModal] = useState<boolean>(false);
 
   const [newStudentPhone, setNewStudentPhone] = useState<string>("");
   const [newStudentEmail, setNewStudentEmail] = useState<string>("");
@@ -51,6 +54,7 @@ export default function SchoolPage() {
   const [, setNewStudentLtoClientId] = useState<string>("");
   const [newStudentMarriageLastName, setNewStudentMarriageLastName] = useState<string>("");
 
+  const [notes, setNotes] = useState<any>();
   const [school, setSchool] = useState<any>();
   const [courses, setCourses] = useState<any>();
   const [branches, setBranches] = useState<any>();
@@ -61,42 +65,21 @@ export default function SchoolPage() {
   const { user, handleDrawer } = useContext(UserContext);
 
   useEffect(() => {
-    console.log("effect!!!");
     if (!user) {
       navigate("/school/login");
     }
 
     schoolService.getSchool(user).then((result) => {
       if (result) {
+        const { notes, courses, branches, students, attendances } = result;
+        setNotes(notes);
         setSchool(result);
+        setCourses(courses);
+        setStudents(students);
+        setBranches(branches);
+        setAttendances(attendances);
       }
     });
-
-    branchService.getAllBranchesBySchoolId(user).then((result) => {
-      if (result?.length > 0) {
-        setBranches(result);
-      }
-    });
-
-    courseService.getAllCoursesBySchoolId(user).then((result) => {
-      if (result?.length > 0) {
-        setCourses(result);
-      }
-    });
-
-    studentService.getAllStudentsBySchoolId(user).then((result) => {
-      if (result?.length > 0) {
-        setStudents(result);
-      }
-    });
-
-    attendanceService.getAllAttendancesBySchoolId(user).then((result) => {
-      if (result) {
-        console.log(result);
-        setAttendances(result);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [search, setSearch] = useState<string>("");
@@ -122,10 +105,7 @@ export default function SchoolPage() {
         description: newCourseDescription,
         price: parseInt(newCoursePrice),
       };
-      newCourse = await courseService.createCourse({
-        ...newCourse,
-        user,
-      });
+      newCourse = await courseService.createCourse(user, newCourse);
       if (newCourse) {
         if (courses) setCourses([...courses, newCourse]);
         else setCourses([newCourse]);
@@ -183,7 +163,6 @@ export default function SchoolPage() {
 
       newStudent = await studentService.createStudent(user, newStudent);
 
-      console.log("newStudent", newStudent);
       setStudents([...students, newStudent]);
     }
   };
@@ -232,6 +211,10 @@ export default function SchoolPage() {
     });
   };
 
+  const getAllNotesByBranchId = (branchId: string) => {
+    const result = notes.filter((i: any) => i.branch !== branchId);
+  };
+
   const printAttendance = () => {};
 
   const deleteBranch = (branchId: string) => {
@@ -253,7 +236,6 @@ export default function SchoolPage() {
   const exportSearchResult = () => {};
 
   const generatePDFReports = () => {
-    console.log("generatePDFReports");
     handleDrawer();
   };
 
@@ -309,9 +291,9 @@ export default function SchoolPage() {
                         <th scope="col" className="px-6 py-3">
                           Date
                         </th>
-                        {/* <th scope="col" className="px-6 py-3">
-                            Instructor
-                          </th> */}
+                        <th scope="col" className="px-6 py-3">
+                          Instructor
+                        </th>
                         <th scope="col" className="px-6 py-3">
                           Status
                         </th>
@@ -331,7 +313,7 @@ export default function SchoolPage() {
                           <td className="px-6 py-4">
                             <a href={`/course/${course._id}`}>{course.name}</a>
                           </td>
-                          <td className="px-6 py-4">{branch.address.split(", ")[0]}</td>
+                          <td className="px-6 py-4">{branch?.address?.split(", ")[0]}</td>
                           <td className="px-6 py-4">
                             {new Date(attendance.in).toLocaleTimeString()}
                           </td>
@@ -433,11 +415,7 @@ export default function SchoolPage() {
               </>
             )}
           </Tabs.Item>
-          {/* <Tabs.Item title="Enrollment" icon={HiAdjustments}>
-          This is <span className="font-medium text-gray-800 dark:text-white">Settings tab's associated content</span>.
-          Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
-          control the content visibility and styling.
-        </Tabs.Item> */}
+          {/* <Tabs.Item title="Exams" icon={HiAdjustments}></Tabs.Item> */}
           <Tabs.Item disabled={!branches} title="Course" icon={HiClipboardList}>
             {branches && (
               <div className="mb-4">
@@ -488,11 +466,21 @@ export default function SchoolPage() {
                           <td className="px-6 py-4">{course.students.length}</td>
                           <td className="px-6 py-4">
                             <button
-                              className="flex align-middle justify-center items-center"
+                              className="flex align-middle justify-center items-center bg-black text-white px-2 py-1 rounded-md mb-2"
                               onClick={() => setOpenUpdateCourseModal(true)}
                             >
                               <HiPencil />
                               Edit Course
+                            </button>
+
+                            <button
+                              className="flex align-middle justify-center items-center bg-black text-white px-2 py-1 rounded-md mb-2"
+                              onClick={() => {
+                                setOpenUpdateCourseModal(true);
+                              }}
+                            >
+                              <HiNewspaper />
+                              View Notes
                             </button>
 
                             {course.students.length > 0 ? (
@@ -561,7 +549,7 @@ export default function SchoolPage() {
                             <a href={`/branch/${branches._id}`}>{index + 1}</a>
                           </th>
                           <td className="px-6 py-4">
-                            <a href={`/branch/${branches._id}`} className="block font-bold text-lg">
+                            <a href={`/branch/${branches._id}`} className="block text-lg mb-2">
                               Address: {branches.address}
                             </a>
                             <a href={`/branch/${branches._id}`} className="block">
@@ -571,10 +559,23 @@ export default function SchoolPage() {
                               Contact Number: {branches?.contactNumber}
                             </a>
                           </td>
-                          <td className="px-6 py-4">{branches.students.length}</td>
+                          <td className="px-6 py-4">
+                            <span className="block font-bold">No. of students each course</span>
+                            {courses?.map((i: any) => (
+                              <span className="block">
+                                {i?.name}: {i?.students?.length}
+                              </span>
+                            ))}
+                            <span className="block"></span>
+                            <span className="block"></span>
+                            <br />
+                            <span className="block font-bold">
+                              Total: {branches.students.length}
+                            </span>
+                          </td>
                           <td className="px-6 py-4">
                             <button
-                              className="flex align-middle justify-center items-center"
+                              className="flex align-middle justify-center items-center bg-black text-white px-2 py-1 rounded-md mb-2"
                               onClick={() => {
                                 setOpenUpdateBranchModal(true);
                                 setUpdatedBranchId(branches._id); // * get the specific branch id
@@ -583,7 +584,17 @@ export default function SchoolPage() {
                               <HiPencil />
                               Edit Branch
                             </button>
-                            {/* <button className="flex align-middle justify-center items-center"><HiStatusOffline />Disable / Enable Branch</button> */}
+                            <button
+                              className="flex align-middle justify-center items-center bg-black text-white px-2 py-1 rounded-md mb-2"
+                              onClick={() => {
+                                getAllNotesByBranchId(branches._id);
+                                // setOpenBranchNotesModal(true);
+                                // setUpdatedBranchId(branches._id); // * get the specific branch id
+                              }}
+                            >
+                              <HiNewspaper />
+                              View Notes
+                            </button>
 
                             {branches.students.length > 0 ? (
                               <></>
@@ -950,6 +961,24 @@ export default function SchoolPage() {
                 </Select>
               </div>
             </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              placeholder="Enroll Student"
+              callback={() => {
+                createStudent();
+                setOpenStudentModal(false);
+              }}
+            />
+            <Button placeholder="Decline" callback={() => setOpenStudentModal(false)} />
+          </Modal.Footer>
+        </Modal>
+
+        {/* Branch Notes */}
+        <Modal show={openBranchNotesModal} onClose={() => setOpenBranchNotesModal(false)}>
+          <Modal.Header>Branch Notes</Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">...</div>
           </Modal.Body>
           <Modal.Footer>
             <Button

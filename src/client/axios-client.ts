@@ -2,6 +2,7 @@ import axios, { Axios } from "axios";
 
 abstract class AxiosClient {
   baseURL: string;
+  noteClient: Axios;
   schoolClient: Axios;
   branchClient: Axios;
   courseClient: Axios;
@@ -33,6 +34,10 @@ abstract class AxiosClient {
 
     this.attendanceClient = axios.create({
       baseURL: this.baseURL + "/attendance",
+    });
+
+    this.noteClient = axios.create({
+      baseURL: this.baseURL + "/note",
     });
   }
 }
