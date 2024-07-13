@@ -1,6 +1,6 @@
 import { Tabs } from "flowbite-react";
 import { Datepicker } from "flowbite-react";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdDirectionsCar } from "react-icons/md";
 import { Modal, Select } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import Alert from "../components/alert-component";
@@ -75,13 +75,14 @@ export default function SchoolPage() {
 
     schoolService.getSchool(user).then((result) => {
       if (result) {
-        const { notes, courses, branches, students, attendances } = result;
-        setNotes(notes);
+        console.log("result", result);
         setSchool(result);
-        setCourses(courses);
-        setStudents(students);
-        setBranches(branches);
-        setAttendances(attendances);
+        setNotes(result.notes);
+        setCourses(result.courses);
+        setStudents(result.students);
+        setBranches(result.branches);
+        setVehicles(result.vehicles);
+        setAttendances(result.attendances);
       }
     });
   }, []);
@@ -99,6 +100,9 @@ export default function SchoolPage() {
   const [newAttendanceCourseId, setNewAttendanceCourseId] = useState<string>();
   const [newAttendanceBranchId, setNewAttendanceBranchId] = useState<string>();
   const [newAttendanceStudentId, setNewAttendanceStudentId] = useState<string>();
+
+  const [newVehicleModel, setNewVehicleModel] = useState<string>();
+  const [newVehicleType, setNewVehicleType] = useState<string>();
 
   const [updatedBranchAddress, setUpdatedBranchAddress] = useState<string>();
 
@@ -199,6 +203,20 @@ export default function SchoolPage() {
       setNewAttendanceCourseId(undefined);
       setNewAttendanceBranchId(undefined);
       setNewAttendanceStudentId(undefined);
+    }
+  };
+
+  const createVehicle = async () => {
+    if (newVehicleModel && newVehicleType) {
+      const newVehicle = await vehicleService.createVehicle(user, {
+        newVehicleModel,
+        newVehicleType,
+      });
+
+      if (newVehicle) {
+        if (vehicles) setVehicles([...vehicles, newVehicle]);
+        else setVehicles([newVehicle]);
+      }
     }
   };
 
@@ -567,7 +585,11 @@ export default function SchoolPage() {
                             <span className="block font-bold">No. of students each course</span>
                             {courses?.map((i: any) => (
                               <span className="block">
-                                {i?.name}: {i?.students?.length}
+                                {i?.name}:{" "}
+                                {
+                                  i?.students?.filter((j: string) => branches.students.includes(j))
+                                    .length
+                                }
                               </span>
                             ))}
                             <span className="block"></span>
@@ -609,6 +631,111 @@ export default function SchoolPage() {
                               >
                                 <HiTrash />
                                 Delete Branch
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </Tabs.Item>
+          <Tabs.Item active={!vehicles} title="Vehicle" icon={MdDirectionsCar}>
+            <div className="mb-4">
+              <div className="w-32 mb-4">
+                <Button
+                  placeholder="Register vehicle"
+                  callback={() => setOpenCreateVehicleModal(true)}
+                />
+              </div>
+
+              {!branches && (
+                <Alert message={"Create a school branch to get started."} type={"warning"} />
+              )}
+
+              {branches && (
+                <div className="relative overflow-x-auto">
+                  <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                        <th scope="col" className="px-6 py-3">
+                          #
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Vehicle Model & Description
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Registration Expiration
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Plate Number
+                        </th>
+
+                        <th scope="col" className="px-6 py-3">
+                          Validity
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {vehicles?.map((i: any, index: number) => (
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          >
+                            <a href={`/vehicle/${i._id}`}>{index + 1}</a>
+                          </th>
+                          <td className="px-6 py-4">
+                            <a href={`/vehicle/${i._id}`} className="block text-lg mb-2">
+                              {i.model}
+                            </a>
+                            {/* <a href={`/vehicle/${i._id}`} className="block">
+                              Contact Person: {i?.contactPerson}
+                            </a>
+                            <a href={`/vehicle/${i._id}`} className="block">
+                              Contact Number: {i?.contactNumber}
+                            </a> */}
+                          </td>
+                          <td className="px-6 py-4">{i.type}</td>
+                          <td className="px-6 py-4">{i?.plateNumber}</td>
+                          <td className="px-6 py-4">{i?.validity}</td>
+                          <td className="px-6 py-4">
+                            <button
+                              className="flex align-middle justify-center items-center bg-black text-white px-2 py-1 rounded-md mb-2"
+                              onClick={() => {
+                                setOpenUpdateBranchModal(true);
+                                setUpdatedBranchId(branches._id); // * get the specific branch id
+                              }}
+                            >
+                              <HiPencil />
+                              Edit Vehicle
+                            </button>
+                            <button
+                              className="flex align-middle justify-center items-center bg-black text-white px-2 py-1 rounded-md mb-2"
+                              onClick={() => {
+                                getAllNotesByBranchId(branches._id);
+                                // setOpenBranchNotesModal(true);
+                                // setUpdatedBranchId(branches._id); // * get the specific branch id
+                              }}
+                            >
+                              <HiNewspaper />
+                              View Notes
+                            </button>
+
+                            {branches?.students?.length > 0 ? (
+                              <></>
+                            ) : (
+                              <button
+                                onClick={() => deleteBranch(branches._id)}
+                                className="flex align-middle justify-center items-center text-red-800"
+                              >
+                                <HiTrash />
+                                Delete Vehicle
                               </button>
                             )}
                           </td>
@@ -993,6 +1120,33 @@ export default function SchoolPage() {
               }}
             />
             <Button placeholder="Decline" callback={() => setOpenStudentModal(false)} />
+          </Modal.Footer>
+        </Modal>
+
+        {/* Create vehicle */}
+        <Modal show={openCreateVehicleModal} onClose={() => setOpenCreateVehicleModal(false)}>
+          <Modal.Header>New Vehicle</Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              <div className="mb-2">
+                <label htmlFor="">Vehicle Model</label>
+                <Input callback={setNewVehicleModel} />
+              </div>
+              <div className="mb-2">
+                <label htmlFor="">Vehicle Type</label>
+                <Input callback={setNewVehicleType} />
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              placeholder="Register Vehicle"
+              callback={() => {
+                createVehicle();
+                setOpenCreateVehicleModal(false);
+              }}
+            />
+            <Button placeholder="Decline" callback={() => setOpenCreateVehicleModal(false)} />
           </Modal.Footer>
         </Modal>
       </div>
