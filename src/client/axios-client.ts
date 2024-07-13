@@ -6,6 +6,7 @@ abstract class AxiosClient {
   schoolClient: Axios;
   branchClient: Axios;
   courseClient: Axios;
+  vehicleClient: Axios;
   studentClient: Axios;
   enrolleeClient: Axios;
   attendanceClient: Axios;
@@ -38,6 +39,10 @@ abstract class AxiosClient {
 
     this.noteClient = axios.create({
       baseURL: this.baseURL + "/note",
+    });
+
+    this.vehicleClient = axios.create({
+      baseURL: this.baseURL + "/vehicle",
     });
   }
 }

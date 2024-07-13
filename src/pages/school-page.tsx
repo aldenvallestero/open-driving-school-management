@@ -17,6 +17,7 @@ import {
   SchoolService,
   BranchService,
   CourseService,
+  VehicleService,
   StudentService,
   AttendanceService,
 } from "../services";
@@ -28,6 +29,7 @@ export default function SchoolPage() {
   const branchService = new BranchService();
   const courseService = new CourseService();
   const studentService = new StudentService();
+  const vehicleService = new VehicleService();
   const attendanceService = new AttendanceService();
 
   const navigate = useNavigate();
@@ -36,6 +38,7 @@ export default function SchoolPage() {
   const [openUpdateBranchModal, setOpenUpdateBranchModal] = useState<boolean>(false);
   const [openCreateCourseModal, setOpenCreateCourseModal] = useState<boolean>(false);
   const [openUpdateCourseModal, setOpenUpdateCourseModal] = useState<boolean>(false);
+  const [openCreateVehicleModal, setOpenCreateVehicleModal] = useState<boolean>(false);
   const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
   const [openAttendanceModal, setOpenAttendanceModal] = useState<boolean>(false);
   const [openCreateAttendanceModal, setOpenCreateAttendanceModal] = useState<boolean>(false);
@@ -58,6 +61,7 @@ export default function SchoolPage() {
   const [school, setSchool] = useState<any>();
   const [courses, setCourses] = useState<any>();
   const [branches, setBranches] = useState<any>();
+  const [vehicles, setVehicles] = useState<any>();
   const [students, setStudents] = useState<any>([]);
   const [attendances, setAttendances] = useState<any>();
   const [updatedBranchId, setUpdatedBranchId] = useState<string>("");
